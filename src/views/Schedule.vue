@@ -15,9 +15,9 @@
               {{ weatherData.tem_day }} °C
             </p>
             <img
-              src="../assets/weather.png"
-              alt=""
-              style="width: 87px; height: 85px"
+                src="../assets/weather.png"
+                alt=""
+                style="width: 87px; height: 85px"
             />
           </div>
         </div>
@@ -46,9 +46,9 @@
             <th>{{ month[index] }}</th>
             <td v-for="(valu, j) in value" :key="j">
               <p
-                v-for="(val, k) in valu"
-                :key="k"
-                :style="{ backgroundColor: colors[k] }"
+                  v-for="(val, k) in valu"
+                  :key="k"
+                  :style="{ backgroundColor: colors[k] }"
               >
                 {{ val.name }}
               </p>
@@ -98,7 +98,7 @@ export default {
       date1: '',
       time: new Date(),
       month: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
-      
+
       colors: [
         "#01D4F2",
         "#D8DF20",
@@ -135,33 +135,33 @@ export default {
       this.$http({
         method: "GET",
         url:
-          "http://192.168.136.205:8080/schedule/" + localStorage.store + '&' + this.date1
+            "http://localhost:9999/schedule/" + localStorage.store + '&' + this.date1
       }).then((result) => {
         this.arr = result.data.data;
       });
     },
     getWeather() {
-      this.$http
-        .get("https://yiketianqi.com/free/day", {
-          params: {
-            unescape: "1",
-            appid: "75128679",
-            appsecret: "J9TSLdau",
-          },
-        })
-        .then((resp) => {
-          if (resp.data) {
-            this.weatherData = resp.data;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      // this.$http
+      //   .get("https://yiketianqi.com/free/day", {
+      //     params: {
+      //       unescape: "1",
+      //       appid: "75128679",
+      //       appsecret: "J9TSLdau",
+      //     },
+      //   })
+      //   .then((resp) => {
+      //     if (resp.data) {
+      //       this.weatherData = resp.data;
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
     },
     getDay(){
       this.$http({
         method: 'GET',
-        url: 'http://192.168.136.205:8080/schedule/day/' + localStorage.store + '&' +  this.date1
+        url: 'http://localhost:9999/schedule/day/' + localStorage.store + '&' +  this.date1
       }).then( result => {
         this.day = result.data.data
       })
@@ -169,7 +169,7 @@ export default {
     getStore() {
       this.$http({
         method: "GET",
-        url: "http://192.168.136.205:8080/Store/stores",
+        url: "http://localhost:9999/Store/stores",
       }).then((result) => {
         this.storeArr = result.data.data;
         this.get();
@@ -188,8 +188,8 @@ export default {
       if (this.weatherData.tem_day < 19) {
         this.tips = "天气寒冷，记得多穿衣服";
       } else if (
-        this.weatherData.tem_day >= 19 ||
-        this.weatherData.tem_day <= 24
+          this.weatherData.tem_day >= 19 ||
+          this.weatherData.tem_day <= 24
       ) {
         this.tips = "天气舒适，适合室外运动";
       } else {
@@ -203,10 +203,10 @@ export default {
         let month = this.value.getMonth() + 1;
         let date=this.value.getDate()
         if (date >= 1 && date <= 9) {
-            date = "0" + date;
+          date = "0" + date;
         }
         if (month >= 1 && month <= 9) {
-            month = "0" + month;
+          month = "0" + month;
         }
         this.date1 = year + '-' + month + '-' + date
         this.get()
