@@ -16,41 +16,41 @@
         <p>请登录您的账号开始体验！</p>
       </div>
       <div id="user-info">
-        <label for="username">用户名</label><br />
+        <label for="username">手机号</label><br />
         <input
-          type="text"
-          name="username"
-          id="username"
-          placeholder="请输入您的用户名"
-          v-model="account.email"
+            type="text"
+            name="username"
+            id="username"
+            placeholder="请输入您的手机号"
+            v-model="account.email"
         /><br />
         <span style="font-size: 13px; color: red">{{ tips }} </span><br />
         <label for="password">密码</label
         ><router-link to="/reset">忘记密码?</router-link><br />
         <input
-          type="password"
-          name="password"
-          id="password"
-          placeholder="**********"
-          v-model="account.password"
-          autocomplete="off"
+            type="password"
+            name="password"
+            id="password"
+            placeholder="**********"
+            v-model="account.password"
+            autocomplete="off"
         /><br />
         <div style="display: flex; margin-top: 20px">
           <input
-            type="text"
-            placeholder="请输入验证码"
-            id="code"
-            v-model="code"
+              type="text"
+              placeholder="请输入验证码"
+              id="code"
+              v-model="code"
           />
-          <img
-            src="http://192.168.136.205:8080/accounts/getVerify"
-            alt=""
-            style="width: 100px; height: 48px; margin-left: 110px"
-            ref="img"
-            @click="change"
-          />
+          <!--          <img-->
+          <!--            src="http://192.168.136.205:8080/accounts/getVerify"-->
+          <!--            alt=""-->
+          <!--            style="width: 100px; height: 48px; margin-left: 110px"-->
+          <!--            ref="img"-->
+          <!--            @click="change"-->
+          <!--          />-->
           <span
-            style="
+              style="
               display: inline-block;
               line-height: 48px;
               font-size: 12px;
@@ -58,21 +58,21 @@
               color: #4687ff;
               user-select: none;
             "
-            @click="change"
-            >看不清? 换一张</span
+              @click="change"
+          >看不清? 换一张</span
           >
         </div>
         <div id="admin-wrapper">
           <div>
             <input type="checkbox" id="remember" v-model="remember" />
             <label for="remember" style="font-size: 14px; margin-left: 4px"
-              >记住密码</label
+            >记住密码</label
             >
           </div>
           <div style="display: flex">
             <input type="checkbox" id="admin" v-model="account.admin" />
             <label for="admin" style="font-size: 14px; margin-left: 4px"
-              >管理员登录</label
+            >管理员登录</label
             >
           </div>
         </div>
@@ -105,13 +105,14 @@ export default {
     submit() {
       this.$http({
         method: "POST",
-        url: "http://192.168.136.205:8080/accounts/login",
-        data: {
-          account: this.account,
-          code: this.code,
-        },
+        url: "http://localhost:9999/accounts/login",
+        // data: {
+        //   account: this.account,
+        //   // code: this.code,
+        // },
+        data: this.account
       }).then((resp) => {
-        if (resp.data.code == 20231) {
+        if (resp.data.code == 200) {
           localStorage.email = this.account.email;
           localStorage.name = resp.data.data.name;
           localStorage.id = resp.data.data.id;
@@ -133,25 +134,25 @@ export default {
       }
     },
     change() {
-      this.$refs.img.src =
-        "http://192.168.136.205:8080/accounts/getVerify?" +
-        new Date().getMilliseconds();
+      // this.$refs.img.src =
+      //   "http://192.168.136.205:8080/accounts/getVerify?" +
+      //   new Date().getMilliseconds();
     },
     setCookie(c_name, c_pwd, exdays) {
       var exdate = new Date();
       exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays);
       window.document.cookie =
-        "userName" + "=" + c_name + ";path=/;expires=" + exdate.toGMTString();
+          "userName" + "=" + c_name + ";path=/;expires=" + exdate.toGMTString();
       window.document.cookie =
-        "userPwd" + "=" + c_pwd + ";path=/;expires=" + exdate.toGMTString();
+          "userPwd" + "=" + c_pwd + ";path=/;expires=" + exdate.toGMTString();
     },
     getCookie: function () {
       if (document.cookie.length > 0) {
         var arr = document.cookie.split("; ");
         for (var i = 0; i < arr.length; i++) {
-          var arr2 = arr[i].split("="); 
+          var arr2 = arr[i].split("=");
           if (arr2[0] == "userName") {
-            this.account.email = arr2[1]; 
+            this.account.email = arr2[1];
           } else if (arr2[0] == "userPwd") {
             this.account.password = arr2[1];
           }
@@ -159,7 +160,7 @@ export default {
       }
     },
     clearCookie: function () {
-      this.setCookie("", "", -1); 
+      this.setCookie("", "", -1);
     },
   },
 };
