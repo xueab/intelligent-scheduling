@@ -1,24 +1,14 @@
-<!--企业管理员 员工管理-->
+<!--门店管理员 员工管理-->
 <template>
   <div id="page">
     <div class="nav">
       <button style="width: 110px" @click="addManage">添加员工</button>
-<!--      <div class="add-type" v-if="show_add">-->
-<!--&lt;!&ndash;        <p @click="page = 0; addInfo()">导入文件添加</p>&ndash;&gt;-->
-<!--        <p @click=addInfo></p>-->
-<!--      </div>-->
+      <div class="add-type" v-if="show_add">
+        <p @click="page = 0; addInfo()">导入文件添加</p>
+        <p @click="page = 1; addInfo()">手动输入添加</p>
+      </div>
       <div>
-        <select name="" id="" style="outline: none;height: 30px;border: 1px solid #999;border-radius: 4px;" v-model="selected">
-          <option value="" disabled selected>选择查看门店</option>
-          <option value="">所有门店</option>
-          <option
-              :value="value.id"
-              v-for="(value, index) in storeArr"
-              :key="index"
-            >
-              {{ value.name }}
-            </option>
-        </select>
+
         <span style="margin: 0px 10px 0px;font-size: 13px;color: #409EFF;">共{{ all }}条数据</span>
         <input type="text" placeholder="请输入姓名" v-model="input" style="margin-right: 18px;"/>
       </div>
@@ -38,9 +28,9 @@
           <td>
             {{ value.name }}&nbsp;
             <i
-              v-show="!loading"
-              class="el-icon-view"
-              @click="drawer = true; showMessage(value.email)"
+                v-show="!loading"
+                class="el-icon-view"
+                @click="drawer = true; showMessage(value.email)"
             ></i>
             <i v-show="loading" class="el-icon-loading"></i>
           </td>
@@ -56,20 +46,20 @@
 
       <div class="pagination">
         <el-pagination
-          background
-          @current-change="currentChange"
-          layout="prev, pager, next"
-          :page-count="total"
-          :current-page="val"
+            background
+            @current-change="currentChange"
+            layout="prev, pager, next"
+            :page-count="total"
+            :current-page="val"
         ></el-pagination>
       </div>
     </div>
 
     <div>
       <el-dialog
-        title="修改信息"
-        :visible.sync="dialogFormVisible"
-        class="change"
+          title="修改信息"
+          :visible.sync="dialogFormVisible"
+          class="change"
       >
         <div>
           <p>姓名：</p><span>{{ changeManage.name }}</span><br><br>
@@ -80,9 +70,9 @@
           <p>所属门店: </p>
           <select name="" id="" v-model="changeManage.store">
             <option
-              :value="value.id"
-              v-for="(value, index) in storeArr"
-              :key="index"
+                :value="value.id"
+                v-for="(value, index) in storeArr"
+                :key="index"
             >
               {{ value.name }}
             </option>
@@ -91,7 +81,7 @@
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
           <el-button type="primary" @click="sendChange"
-            >确 定</el-button
+          >确 定</el-button
           >
         </div>
       </el-dialog>
@@ -101,63 +91,63 @@
       <!-- 点击手动添加进入此页面 -->
       <div v-if=" page == 1 ">
         <p>添加员工信息</p>
-      <div class="wrapper">
-        <div style="display: flex">
-          <div>
-            <label for="name">姓名</label><br />
-            <input type="text" id="name" v-model="manage.name" /><br />
-            <label for="phone">电话</label><br />
-            <input type="text" id="phone" v-model="manage.phone" maxlength="11" />
+        <div class="wrapper">
+          <div style="display: flex">
+            <div>
+              <label for="name">姓名</label><br />
+              <input type="text" id="name" v-model="manage.name" /><br />
+              <label for="phone">电话</label><br />
+              <input type="text" id="phone" v-model="manage.phone" maxlength="11" />
+            </div>
+            <div>
+              <label for="name">职位</label><br />
+              <input type="text" id="position" v-model="manage.posts" /><br />
+              <label for="idCard">身份证</label><br />
+              <input type="text" id="idCard" v-model="manage.idCard" maxlength="18" />
+            </div>
           </div>
-          <div>
-            <label for="name">职位</label><br />
-            <input type="text" id="position" v-model="manage.posts" /><br />
-            <label for="idCard">身份证</label><br />
-            <input type="text" id="idCard" v-model="manage.idCard" maxlength="18" />
+          <div style="display: flex; align-items: center">
+            <div>
+              <label for="email" style="width: 460px">电子邮箱 &nbsp; &nbsp;<span style="font-size: 13px; color: red;">{{ tips }} </span></label><br />
+              <input type="email" id="email" v-model="manage.email" @blur="checkEmail" style="width: 460px" />
+            </div>
+            <select name="" id="select" v-model="manage.store">
+              <option value="" disabled selected>选择门店</option>
+              <option
+                  :value="value.id"
+                  v-for="(value, index) in storeArr"
+                  :key="index"
+              >
+                {{ value.name }}
+              </option>
+            </select>
           </div>
-        </div>
-        <div style="display: flex; align-items: center">
-          <div>
-            <label for="email" style="width: 460px">电子邮箱 &nbsp; &nbsp;<span style="font-size: 13px; color: red;">{{ tips }} </span></label><br />
-            <input type="email" id="email" v-model="manage.email" @blur="checkEmail" style="width: 460px" />
-          </div>
-          <select name="" id="select" v-model="manage.store">
-            <option value="" disabled selected>选择门店</option>
-            <option
-              :value="value.id"
-              v-for="(value, index) in storeArr"
-              :key="index"
-            >
-              {{ value.name }}
-            </option>
-          </select>
-        </div>
-        <div style="margin-top: 30px">
-          <el-button type="primary" style="margin-right: 30px" @click="confirm" ref="confirm"
+          <div style="margin-top: 30px">
+            <el-button type="primary" style="margin-right: 30px" @click="confirm" ref="confirm"
             >确认</el-button>
-          <el-button @click="cancel">取消</el-button>
-          <p v-show="fit">请检查您输入的信息是否正确！</p>
+            <el-button @click="cancel">取消</el-button>
+            <p v-show="fit">请检查您输入的信息是否正确！</p>
+          </div>
         </div>
-      </div>
       </div>
 
       <!-- 点击导入文件添加进入此页面 -->
       <div v-if="page == 0" v-loading="addLoading">
         <p style="text-align: center;width: 100%; margin: 50px 0px 30px;font-size: 18px;font-weight: 500;">请选择您要提交的文件</p>
         <el-upload
-          class="upload-demo"
-          drag
-          action="#"
-          :auto-upload="false"
-          :file-list="list"
-          :on-change="handleChange">
+            class="upload-demo"
+            drag
+            action="#"
+            :auto-upload="false"
+            :file-list="list"
+            :on-change="handleChange">
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
           <div class="el-upload__tip" slot="tip">只能上传xsl/xslx文件</div>
         </el-upload>
         <div style="margin-top: 30px">
           <el-button type="primary" style="margin-right: 30px" @click="confirmUpload"
-            >确认</el-button
+          >确认</el-button
           >
           <el-button @click="cancel">取消</el-button>
         </div>
@@ -167,9 +157,9 @@
 
     <!-- 员工详情页 -->
     <el-drawer
-      title="员工个人信息"
-      :visible.sync="drawer"
-      :with-header="false">
+        title="员工个人信息"
+        :visible.sync="drawer"
+        :with-header="false">
       <div class="outer">
         <div class="top">
           <p>{{ user.name }}</p>
@@ -191,6 +181,8 @@
 </template>
 
 <script>
+import {post} from "axios";
+
 export default {
   name:'Manage',
   data() {
@@ -211,14 +203,15 @@ export default {
       input: '',
       dialogFormVisible: false,
       list:[],
-      manage:{
-        name: '',
-        posts: '',
-        phone: '',
-        idCard: '',
-        email: '',
-        store: ''
-      },
+      manage:[
+        // name: '',
+        // posts: '',
+        // phone: '',
+        // idCard: '',
+        // email: '',
+        // store: ''
+
+      ],
       storeArr: [
         {
           id: "hbyt01",
@@ -307,9 +300,6 @@ export default {
     // 添加员工按钮
     addManage() {
       this.show_add = !this.show_add;
-      this.show = true;
-      document.body.style.overflow = "hidden";
-      this.page = 1;
     },
     // 手动添加员工信息
     addInfo() {
@@ -336,25 +326,25 @@ export default {
     confirmUpload(){
       let param = new FormData()
       this.list.forEach(
-						(val, index) => {
-							param.append("file", val.raw);
+          (val, index) => {
+            param.append("file", val.raw);
           }
-        );
-        this.addLoading = true
-        this.$http({
-          "url": "http://192.168.136.205:8080/users/uploadExcel",
-          "method": "POST",
-          "timeout": 0,
-          "processData": false,
-          "mimeType": "multipart/form-data",
-          "contentType": false,
-          "data": param
-        }).then( result => {
-          this.addLoading = false
-          this.show = false
-          this.getManage()
-          alert(result.data.msg)
-        })
+      );
+      this.addLoading = true
+      this.$http({
+        "url": "http://192.168.136.205:8080/users/uploadExcel",
+        "method": "POST",
+        "timeout": 0,
+        "processData": false,
+        "mimeType": "multipart/form-data",
+        "contentType": false,
+        "data": param
+      }).then( result => {
+        this.addLoading = false
+        this.show = false
+        this.getManage()
+        alert(result.data.msg)
+      })
 
     },
     // 点击添加员工后的取消按钮
@@ -371,25 +361,25 @@ export default {
       document.body.style.overflow = "";
     },
     open1() {
-        this.$notify({
-          title: '成功',
-          message: '删除成功！',
-          type: 'success',
-          duration: '1000'
-        });
-      },
+      this.$notify({
+        title: '成功',
+        message: '删除成功！',
+        type: 'success',
+        duration: '1000'
+      });
+    },
     open2() {
-        this.$notify({
-          title: '警告',
-          message: this.note,
-          type: 'warning',
-          duration: '1000'
-        });
-      },
+      this.$notify({
+        title: '警告',
+        message: this.note,
+        type: 'warning',
+        duration: '1000'
+      });
+    },
     // 点击确定添加员工按钮
     confirm() {
       if(this.manage.name.length == 0 || this.manage.posts.length == 0 || this.manage.phone.length == 0 ||
-      this.manage.idCard.length == 0 || this.manage.email.length == 0 || this.manage.store.length == 0){
+          this.manage.idCard.length == 0 || this.manage.email.length == 0 || this.manage.store.length == 0){
         this.note = '输入字段不可为空！'
         this.open2()
       }else{
@@ -511,7 +501,7 @@ td {
   position: absolute;
   bottom: 0;
   right: 0;
-  
+
 }
 .light {
   position: absolute;
