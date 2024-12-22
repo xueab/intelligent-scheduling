@@ -10,6 +10,11 @@ import Change from '@/views/Change'
 import UserInfo from '@/views/UserInfo'
 import Manage from '@/views/Manage'
 import Router from 'vue-router'
+import Schedule1 from "@/views/Schedule1.vue";
+import Schedule2 from "@/views/Schedule2.vue";
+import Manage1 from "@/views/Manage1.vue";
+import StoreInformation1 from "@/views/StoreInformation1.vue";
+
 
 
 export const constantRouterMap = [
@@ -31,12 +36,28 @@ export const constantRouterMap = [
                 component: Schedule
             },
             {
+                path: 'Schedule1',
+                component: Schedule1
+            },
+            {
+                path: 'Schedule2',
+                component: Schedule2
+            },
+            {
                 path: 'StoreInformation',
                 component: StoreInformation
             },
             {
+                path: 'StoreInformation1',
+                component: StoreInformation1
+            },
+            {
                 path: 'Manage',
                 component: Manage
+            },
+            {
+                path: 'Manage1',
+                component: Manage1
             },
             {
                 path: 'UserInfo',

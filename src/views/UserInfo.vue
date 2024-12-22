@@ -2,9 +2,11 @@
   <div class="info">
     <div class="main-wrapper">
       <el-descriptions class="margin-top" title="个人信息" :column="2"  border v-loading="user.name == undefined">
+
         <template slot="extra">
           <el-button type="primary" size="small" @click="change">修改</el-button>
         </template>
+
         <el-descriptions-item>
           <template slot="label">
             <i class="el-icon-user"></i>
@@ -12,6 +14,7 @@
           </template>
           {{ user.name }}
         </el-descriptions-item>
+
         <el-descriptions-item>
           <template slot="label">
             <i class="el-icon-male"></i>
@@ -19,6 +22,7 @@
           </template>
           {{ user.gender }}
         </el-descriptions-item>
+
         <el-descriptions-item>
           <template slot="label">
             <i class="el-icon-male"></i>
@@ -26,6 +30,7 @@
           </template>
           {{ user.posts }}
         </el-descriptions-item>
+
         <el-descriptions-item>
           <template slot="label">
             <i class="el-icon-male"></i>
@@ -33,6 +38,7 @@
           </template>
           {{ user.store }}
         </el-descriptions-item>
+
         <el-descriptions-item>
           <template slot="label">
             <i class="el-icon-ship"></i>
@@ -40,6 +46,7 @@
           </template>
           {{ user.age }}
         </el-descriptions-item>
+
         <el-descriptions-item>
           <template slot="label">
             <i class="el-icon-mobile-phone"></i>
@@ -55,6 +62,7 @@
           </template>
           {{ user.day }}
         </el-descriptions-item>
+
         <el-descriptions-item>
           <template slot="label">
             <i class="el-icon-s-data"></i>
@@ -62,6 +70,7 @@
           </template>
           {{ user.date }}
         </el-descriptions-item>
+
         <el-descriptions-item>
           <template slot="label">
             <i class="el-icon-s-data"></i>
@@ -69,6 +78,7 @@
           </template>
           {{ user.time }}
         </el-descriptions-item>
+
         <el-descriptions-item>
           <template slot="label">
             <i class="el-icon-unlock"></i>
@@ -76,6 +86,7 @@
           </template>
           {{ user.idCard | filter_idCard }}
         </el-descriptions-item>
+
         <el-descriptions-item>
           <template slot="label">
             <i class="el-icon-office-building"></i>
@@ -83,6 +94,7 @@
           </template>
           {{  user.address }}
         </el-descriptions-item>
+
       </el-descriptions>
     </div>
 

@@ -35,13 +35,13 @@
             v-model="account.password"
             autocomplete="off"
         /><br />
-        <div style="display: flex; margin-top: 20px">
-          <input
-              type="text"
-              placeholder="请输入验证码"
-              id="code"
-              v-model="code"
-          />
+<!--        <div style="display: flex; margin-top: 20px">-->
+<!--          <input-->
+<!--              type="text"-->
+<!--              placeholder="请输入验证码"-->
+<!--              id="code"-->
+<!--              v-model="code"-->
+<!--          />-->
           <!--          <img-->
           <!--            src="http://192.168.136.205:8080/accounts/getVerify"-->
           <!--            alt=""-->
@@ -49,31 +49,47 @@
           <!--            ref="img"-->
           <!--            @click="change"-->
           <!--          />-->
-          <span
-              style="
-              display: inline-block;
-              line-height: 48px;
-              font-size: 12px;
-              cursor: pointer;
-              color: #4687ff;
-              user-select: none;
-            "
-              @click="change"
-          >看不清? 换一张</span
-          >
-        </div>
+<!--          <span-->
+<!--              style="-->
+<!--              display: inline-block;-->
+<!--              line-height: 48px;-->
+<!--              font-size: 12px;-->
+<!--              cursor: pointer;-->
+<!--              color: #4687ff;-->
+<!--              user-select: none;-->
+<!--            "-->
+<!--              @click="change"-->
+<!--          >看不清? 换一张</span-->
+<!--          >-->
+<!--        </div>-->
+
+
+
         <div id="admin-wrapper">
+<!--          <div>-->
+<!--            <input type="checkbox" id="remember" v-model="remember" />-->
+<!--            <label for="remember" style="font-size: 14px; margin-left: 4px"-->
+<!--            >记住密码</label-->
+<!--            >-->
+<!--          </div>-->
+
+<!--          <div style="display: flex">-->
+<!--            <input type="checkbox" id="admin" v-model="account.admin" />-->
+<!--            <label for="admin" style="font-size: 14px; margin-left: 4px"-->
+<!--            >管理员登录</label-->
+<!--            >-->
+<!--          </div>-->
           <div>
-            <input type="checkbox" id="remember" v-model="remember" />
-            <label for="remember" style="font-size: 14px; margin-left: 4px"
-            >记住密码</label
-            >
-          </div>
-          <div style="display: flex">
-            <input type="checkbox" id="admin" v-model="account.admin" />
-            <label for="admin" style="font-size: 14px; margin-left: 4px"
-            >管理员登录</label
-            >
+            <label>身份：</label>
+            <el-select v-model="account.type"  placeholder="请选择">
+              <el-option label="员工" :value="1"></el-option>
+              <el-option label="企业管理员" :value="2"></el-option>
+              <el-option label="门店管理员" :value="3"></el-option>
+<!--              <el-option label="周四" :value="4"></el-option>-->
+<!--              <el-option label="周五" :value="5"></el-option>-->
+<!--              <el-option label="周六" :value="6"></el-option>-->
+<!--              <el-option label="周日" :value="7"></el-option>-->
+            </el-select>
           </div>
         </div>
         <button id="submit" @click="submit">登录</button>
@@ -90,7 +106,8 @@ export default {
       account: {
         email: "",
         password: "",
-        admin: false,
+        // admin: false,
+        type: "",
       },
       code: "",
       tips: "",
@@ -117,7 +134,8 @@ export default {
           localStorage.name = resp.data.data.name;
           localStorage.id = resp.data.data.id;
           localStorage.store = resp.data.data.store;
-          localStorage.admin = this.account.admin;
+          // localStorage.admin = this.account.admin;
+          localStorage.type = this.account.type;
           this.$router.replace("/index");
         } else {
           this.tips = resp.data.msg;

@@ -27,42 +27,92 @@
               <span>个人信息</span>
             </template>
           </el-menu-item>
+
+          <div v-if="isEmployee">
           <el-menu-item index="/index/leave">
             <i class="el-icon-message-solid"></i>
             <span slot="title">请假申请</span>
           </el-menu-item>
-          <div v-if="isAdmin">
+          </div>
+
+          <div v-if="isEmployee || isStoreAdmin">
+            <el-menu-item index="/index/Schedule2">
+              <i class="el-icon-message-solid"></i>
+              <span slot="title">查看排班信息</span>
+            </el-menu-item>
+          </div>
+
+          <div v-if="isEnterpriseAdmin">
             <el-menu-item index="/index/StoreInformation">
               <template slot="title">
                 <i class="el-icon-s-marketing"></i>
                 <span>门店概况</span>
               </template>
             </el-menu-item>
+
+          </div>
+
+          <div v-if="isStoreAdmin">
+            <el-menu-item index="/index/StoreInformation1">
+              <template slot="title">
+                <i class="el-icon-s-marketing"></i>
+                <span>门店概况</span>
+              </template>
+            </el-menu-item>
+          </div>
+
+
+
+
+          <div v-if="isStoreAdmin">
             <el-submenu index="5">
               <template slot="title">
                 <i class="el-icon-s-custom"></i>
                 <span>员工管理</span>
               </template>
               <el-menu-item-group>
-                <el-menu-item index="/index/Manage">员工概况</el-menu-item>
+                <el-menu-item index="/index/Manage1">员工概况</el-menu-item>
                 <el-menu-item index="/index/LeaveApproval"
-                  >请假审批</el-menu-item
+                >请假审批</el-menu-item
                 >
                 <el-menu-item index="/index/ChangeSchedule"
-                  >修改排班</el-menu-item
+                >修改排班</el-menu-item
                 >
-              </el-menu-item-group>
-            </el-submenu>
-            <el-submenu index="6">
-              <template slot="title">
-                <i class="el-icon-s-tools"></i>
-                <span>系统管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="/index/Change">修改客流量</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
           </div>
+
+
+          <div v-if="isEnterpriseAdmin">
+            <el-menu-item index="/index/Manage">
+              <template slot="title">
+                <i class="el-icon-s-tools"></i>
+                <span>员工概况</span>
+              </template>
+            </el-menu-item>
+          </div>
+
+<!--          <div v-if="isStoreAdmin">-->
+<!--            <el-submenu index="6">-->
+<!--              <template slot="title">-->
+<!--                <i class="el-icon-s-tools"></i>-->
+<!--                <span>系统管理</span>-->
+<!--              </template>-->
+
+<!--              <el-menu-item-group>-->
+<!--                <el-menu-item index="/index/Change">修改客流量</el-menu-item>-->
+<!--              </el-menu-item-group>-->
+
+<!--            </el-submenu>-->
+<!--          </div>-->
+
+          <div v-if="isStoreAdmin">
+          <el-menu-item index="/index/Schedule1">
+            <i class="el-icon-message-solid"></i>
+            <span slot="title">生成排班方案</span>
+          </el-menu-item>
+          </div>
+
         </el-menu>
       </div>
       <div id="right">
@@ -81,13 +131,16 @@
             :router="true"
           >
             <el-menu-item index="/index">排班首页</el-menu-item>
-            <el-menu-item index="/index/leave">请假申请</el-menu-item>
-            <el-submenu index="2" v-if="isAdmin">
+            <el-menu-item index="/index/leave" v-if="isEmployee">请假申请</el-menu-item>
+            <el-submenu index="2" v-if="isStoreAdmin">
               <template slot="title">我的工作台</template>
               <el-menu-item index="/index/manage">员工概况</el-menu-item>
               <el-menu-item index="/index/LeaveApproval">请假审批</el-menu-item>
               <el-menu-item index="/index/ChangeSchedule"
                 >修改排班</el-menu-item
+              >
+              <el-menu-item index="/index/Schedule1"
+              >生成排班方案</el-menu-item
               >
             </el-submenu>
           </el-menu>
@@ -115,7 +168,9 @@ export default {
       gender: "",
       name: localStorage.name,
       dialogFormVisible: false,
-      isAdmin: false,
+      isEmployee: false,
+      isStoreAdmin: false,
+      isEnterpriseAdmin: false,
       list: [],
     };
   },
@@ -130,10 +185,17 @@ export default {
     },
   },
   mounted() {
-    if (localStorage.admin == "false") {
-      this.isAdmin = false;
+    // if (localStorage.admin == "false") {
+    //   this.isAdmin = false;
+    // } else {
+    //   this.isAdmin = true;
+    // }
+    if (localStorage.type == 1) {
+        this.isEmployee = true;
+    } else if (localStorage.type == 2) {
+        this.isEnterpriseAdmin = true;
     } else {
-      this.isAdmin = true;
+        this.isStoreAdmin = true;
     }
   },
   watch: {
