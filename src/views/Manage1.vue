@@ -4,7 +4,8 @@
     <div class="nav">
       <button style="width: 110px" @click="addManage">添加员工</button>
       <div class="add-type" v-if="show_add">
-        <p @click="page = 0; addInfo()">导入文件添加</p>
+<!--        <p @click="page = 0; addInfo()">导入文件添加</p>-->
+<!--        <p @click="page = 1; addInfo()">手动输入添加</p>-->
         <p @click="page = 1; addInfo()">手动输入添加</p>
       </div>
       <div>
@@ -39,7 +40,7 @@
           <td>{{ value.email }}</td>
           <td>
             <button @click="change(index)">修改</button>
-            <button :id="value.id" @click="del">删除</button>
+            <button :id="value.id" @click="del(value.id)">删除</button>
           </td>
         </tr>
       </table>
@@ -181,37 +182,37 @@
 </template>
 
 <script>
-import {post} from "axios";
+// import {post} from "axios";
 
 export default {
   name:'Manage',
   data() {
     return {
       show: false,
-      page:'',
+      page: 1,
       show_add: false,
       drawer:false,
       val: 1,
-      total: 0,
+      total: 0,             // total page
       loading: false,
       tips: '',
       fit: false,
       note:'',
-      all: 0,
+      all: 0,                 // 全部数据
       selected: '',
       addLoading: false,
       input: '',
       dialogFormVisible: false,
       list:[],
-      manage:[
-        // name: '',
-        // posts: '',
-        // phone: '',
-        // idCard: '',
-        // email: '',
-        // store: ''
+      manage: {
+        name: '',
+        posts: '',
+        phone: '',
+        idCard: '',
+        email: '',
+        store: ''
 
-      ],
+      },
       storeArr: [
         {
           id: "hbyt01",
@@ -247,7 +248,7 @@ export default {
     getManage(){
       this.$http({
         method: "GET",
-        url: "http://192.168.136.205:8080/users/pages/" + this.val + '&' + this.selected + '&' + this.input
+        url: "http://localhost:9999/employee/pages/" + this.val + '&' + this.selected + '&' + this.input
       }).then((resp) => {
         this.manages = resp.data.data
         this.total = parseInt(resp.data.msg)
@@ -257,7 +258,7 @@ export default {
     getStore(){
       this.$http({
         method: 'GET',
-        url: 'http://192.168.136.205:8080/Store/stores'
+        url: 'http://localhost:9999/Store/stores'
       }).then( result => {
         this.storeArr = result.data.data
       })
@@ -275,18 +276,19 @@ export default {
       this.dialogFormVisible = false
       this.$http({
         method:'PUT',
-        url: 'http://192.168.136.205:8080/users/employee',
-        data:{
-          'user': this.changeManage
-        }
+        url: 'http://localhost:9999/employee/modify',
+        // data:{
+        //   'user': this.changeManage
+
+        data: this.changeManage
       })
       this.getManage()
     },
     // 删除按钮
-    del(e) {
+    del(id) {
       this.$http({
         method: 'DELETE',
-        url: "http://192.168.136.205:8080/users/" + e.target.id,
+        url: "http://localhost:9999/employee/delete" + id,
       }).then(resp => {
         this.getManage()
         if( resp.data.msg == '删除成功'){
@@ -309,16 +311,16 @@ export default {
     },
     // 电子邮件失去焦点后判断是否被注册
     checkEmail(){
-      this.$http({
-        method: 'GET',
-        url: 'http://192.168.136.205:8080/users/' + this.manage.email
-      }).then(result => {
-        if(result.data.code == 20231){
-          this.tips = result.data.msg
-        }else{
-          this.tips = result.data.msg
-        }
-      })
+      // this.$http({
+      //   method: 'GET',
+      //   url: 'http://192.168.136.205:8080/users/' + this.manage.email
+      // }).then(result => {
+      //   if(result.data.code == 20231){
+      //     this.tips = result.data.msg
+      //   }else{
+      //     this.tips = result.data.msg
+      //   }
+      // })
     },
     handleChange(file , fileList){
       this.list = fileList
@@ -385,10 +387,12 @@ export default {
       }else{
         this.$http({
           method: 'POST',
-          url: 'http://192.168.136.205:8080/users/',
-          data: {
-            'user': this.manage
-          }
+          url: 'http://localhost:9999/employee/add' + localStorage.storeId,
+          // data: {
+          //   'user': this.manage
+          // }
+          data: this.manage
+
         }).then(result => {
           if(result.data.data){
             alert(result.data.msg)

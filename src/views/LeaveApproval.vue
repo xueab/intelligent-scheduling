@@ -1,3 +1,4 @@
+<!--审核请假记录-->
 <template>
   <div class="page">
     <div class="title">
@@ -9,7 +10,7 @@
         </div>
     </div>
     <div>
-        <div class="list" v-for="(item,index) in arr" :key="index">
+        <div class="list" v-for="(item,index) in arr " :key="index">
             <div style="width: 70px;">
                 <p class="tips">姓名</p>
                 <p>{{ item.name }}</p>
@@ -71,7 +72,7 @@ export default {
         getData(){
             this.$http({
                 method: 'GET',
-                url: 'http://192.168.1.102:8080/Holiday/trans'
+                url: 'http://localhost:9999/Holiday/trans' + localStorage.storeId
             }).then((result) => {
                 this.arr = result.data
             })
@@ -80,7 +81,7 @@ export default {
             this.arr[i].state = 1
             this.$http({
                 method: 'POST',
-                url: 'http://192.168.1.102:8080/Holiday/Update',
+                url: 'http://localhost:9999/Holiday/Update',
                 data:{
                     'holiday':{
                         'id': e,

@@ -1,3 +1,4 @@
+<!--请假记录-->
 <template>
   <div class="main">
     <div class="title">我的请假</div>
@@ -487,9 +488,10 @@ export default defineComponent({
       this.$http({
         method: "POST",
         url: "http://localhost:9999/Holiday/Save",
-        data: {
-          holiday: this.obj,
-        },
+        // data: {
+        //   holiday: this.obj,
+        // },
+        data: this.obj,
       }).then((result) => {
         this.open1();
       });

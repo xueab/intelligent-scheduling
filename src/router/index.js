@@ -14,6 +14,9 @@ import Schedule1 from "@/views/Schedule1.vue";
 import Schedule2 from "@/views/Schedule2.vue";
 import Manage1 from "@/views/Manage1.vue";
 import StoreInformation1 from "@/views/StoreInformation1.vue";
+import Schedule3 from "@/views/Schedule3.vue";
+import StoreAdminInfo from "@/views/StoreAdminInfo.vue";
+import EnterpriseAdminInfo from "@/views/EnterpriseAdminInfo.vue";
 
 
 
@@ -44,6 +47,10 @@ export const constantRouterMap = [
                 component: Schedule2
             },
             {
+                path: 'Schedule3',
+                component: Schedule3
+            },
+            {
                 path: 'StoreInformation',
                 component: StoreInformation
             },
@@ -62,6 +69,14 @@ export const constantRouterMap = [
             {
                 path: 'UserInfo',
                 component: UserInfo
+            },
+            {
+                path: 'StoreAdminInfo',
+                component: StoreAdminInfo
+            },
+            {
+                path: 'EnterpriseAdminInfo',
+                component: EnterpriseAdminInfo
             },
             {
                 path: 'LeaveApproval',

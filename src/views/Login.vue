@@ -133,7 +133,7 @@ export default {
           localStorage.email = this.account.email;
           localStorage.name = resp.data.data.name;
           localStorage.id = resp.data.data.id;
-          localStorage.store = resp.data.data.store;
+          localStorage.storeId = resp.data.data.storeId;
           // localStorage.admin = this.account.admin;
           localStorage.type = this.account.type;
           this.$router.replace("/index");
