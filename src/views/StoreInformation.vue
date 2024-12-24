@@ -29,7 +29,7 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="change"
+        <el-button type="primary" @click="sendChange"
         >确 定</el-button
         >
       </div>
@@ -76,17 +76,17 @@
         </tr>
 
         <p v-if="!store.length" style="text-align: center;margin-top: 10px;color: #999;">暂无数据</p>
-        <tr v-for="(val, index) in store" :key="val.id">
+        <tr v-for="(val, index) in store" :key="val.id">\
+          <td>{{ val.id }}</td>
           <td>{{ val.name }}</td>
           <td>{{ val.size }}</td>
           <td>{{ val.address }}</td>
           <td>{{ val.number }}</td>
           <td>
             <button @click="change(index)">修改</button>
-            <button :id="val.id" @click="del">删除</button>
+            <button :id="val.id" @click="del(val.id)">删除</button>
           </td>
         </tr>
-
       </table>
       <el-empty description="暂无数据" v-if="store.length == 0"></el-empty>
 
@@ -144,9 +144,6 @@ export default {
       store:[
         {id: 1, name: '1', size: 10, address: "杭州", number: 10},
         {id: 2, name: '2', size: 10, address: "杭州", number: 10},
-
-
-
       ],
       storeArr: [
         {
@@ -158,68 +155,65 @@ export default {
           name: "电力",
         }
       ],
-      manages: [],
-      user:{},
-      changeManage:{}
+      // manages: [],
+      // user:{},
+      changeStore:{} // 存储修改的门店
     };
   },
   mounted() {
-    this.getManage()
+    // this.getManage()
     this.getStore()
   },
   watch:{
     input(){
-      this.getManage()
+      // this.getManage()
+      this.getStore()
     },
     selected(){
       this.val = 1
-      this.getManage()
+      // this.getManage()
+      this.getStore()
     }
   },
   methods: {
-    getManage(){
-      this.$http({
-        method: "GET",
-        url: "http://192.168.136.205:8080/users/pages/" + this.val + '&' + this.selected + '&' + this.input
-      }).then((resp) => {
-        this.manages = resp.data.data
-        this.total = parseInt(resp.data.msg)
-        this.all = resp.data.code
-      });
-    },
+    // 获取门店信息
     getStore(){
       this.$http({
         method: 'GET',
-        url: 'http://192.168.136.205:8080/Store/stores'
+        url: 'http://localhost:9999/Store/stores'
       }).then( result => {
         this.storeArr = result.data.data
       })
     },
     currentChange(val){
       this.val = val
-      this.getManage()
+      // this.getManage()
+      this.getStore()
     },
     // 修改按钮
     change(e) {
       this.dialogFormVisible = true
-      this.changeManage = this.manages[e]
+      this.changeStore = this.store[e]
     },
+    // 修改排班接口
     sendChange(){
       this.dialogFormVisible = false
       this.$http({
         method:'PUT',
-        url: 'http://192.168.136.205:8080/users/employee',
-        data:{
-          'user': this.changeManage
-        }
+        url: 'http://localhost:9999/Store/modiftyStore',
+        // data:{
+        //   'user': this.changeManage
+        // }
+        data: this.changeStore
       })
-      this.getManage()
+      // this.getManage()
+      this.getStore()
     },
-    // 删除按钮
-    del(e) {
+    // 删除门店信息
+    del(id) {
       this.$http({
         method: 'DELETE',
-        url: "http://192.168.136.205:8080/users/" + e.target.id,
+        url: "http://localhost:9999/Store/deleteStore/" + id,
       }).then(resp => {
         this.getManage()
         if( resp.data.msg == '删除成功'){
@@ -230,13 +224,13 @@ export default {
         }
       })
     },
-    // 添加员工按钮
+    // 添加门店按钮
     addStore1() {
       this.show_add = !this.show_add;
       this.show = true;
       document.body.style.overflow = "hidden";
     },
-    // 手动添加员工信息
+    // 手动添加门店信息
     addInfo() {
       this.show = true;
       this.show_add = !this.show_add;
@@ -284,7 +278,7 @@ export default {
     },
     // 点击添加员工后的取消按钮
     cancel() {
-      this.manage = {
+      this.myStore = {
         name: '',
         posts: '',
         phone: '',
@@ -311,19 +305,20 @@ export default {
         duration: '1000'
       });
     },
-    // 点击确定添加员工按钮
+    // 添加门店信息
     confirm() {
-      if(this.manage.name.length == 0 || this.manage.posts.length == 0 || this.manage.phone.length == 0 ||
-          this.manage.idCard.length == 0 || this.manage.email.length == 0 || this.manage.store.length == 0){
+      if(this.myStore.name.length == 0 || this.myStore.size.length == 0 || this.myStore.address.length == 0){
         this.note = '输入字段不可为空！'
         this.open2()
       }else{
         this.$http({
           method: 'POST',
-          url: 'http://192.168.136.205:8080/users/',
-          data: {
-            'user': this.manage
-          }
+          url: 'http://localhost:9999/Store/addStore',
+          // data: {
+          //   // 'user': this.manage
+          //
+          // }
+          data: this.myStore,
         }).then(result => {
           if(result.data.data){
             alert(result.data.msg)
@@ -336,7 +331,8 @@ export default {
               email: '',
               store: ''
             }
-            this.getManage()
+            // this.getManage()
+            this.getStore();
           }else{
             this.tips = result.data.msg
           }

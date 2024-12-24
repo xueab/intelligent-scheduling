@@ -128,6 +128,7 @@ export default {
         "#33E680",
         "#B334FF",
       ],
+      // 存储排班信息
       arr: [
           // 周一
           [
@@ -170,19 +171,20 @@ export default {
   },
   created() {
     // this.getWeather();
-
+    this.get()
   },
   mounted() {
     this.get();
   },
   methods: {
+    // 获取日排班信息
     get() {
       this.$http({
         method: "GET",
         url:
-            "http://localhost:9999/schedule/" + localStorage.store + '&' + this.date1
+            "http://localhost:9999/schedule/" + localStorage.storeId + '&' + this.date1
       }).then((result) => {
-        // this.arr = result.data.data;
+        this.arr = result.data.data;
       });
     },
     getWeather() {
@@ -203,44 +205,44 @@ export default {
       //     console.log(err);
       //   });
     },
-    getDay(){
-      this.$http({
-        method: 'GET',
-        url: 'http://localhost:9999/schedule/day/' + localStorage.store + '&' +  this.date1
-      }).then( result => {
-        // this.day = result.data.data
-      })
-    },
-    getStore() {
-      this.$http({
-        method: "GET",
-        url: "http://localhost:9999/Store/stores",
-      }).then((result) => {
-        this.storeArr = result.data.data;
-        this.get();
-      });
-    },
-    open2() {
-      this.$notify({
-        title: "提示",
-        message: "请填写您所管理的门店信息，以便使用其他功能！",
-        duration: 0,
-      });
-    },
+    // getDay(){
+    //   this.$http({
+    //     method: 'GET',
+    //     url: 'http://localhost:9999/schedule/day/' + localStorage.store + '&' +  this.date1
+    //   }).then( result => {
+    //     // this.day = result.data.data
+    //   })
+    // },
+    // getStore() {
+    //   this.$http({
+    //     method: "GET",
+    //     url: "http://localhost:9999/Store/stores",
+    //   }).then((result) => {
+    //     this.storeArr = result.data.data;
+    //     this.get();
+    //   });
+    // },
+    // open2() {
+    //   this.$notify({
+    //     title: "提示",
+    //     message: "请填写您所管理的门店信息，以便使用其他功能！",
+    //     duration: 0,
+    //   });
+    // },
   },
   watch: {
-    weatherData() {
-      if (this.weatherData.tem_day < 19) {
-        this.tips = "天气寒冷，记得多穿衣服";
-      } else if (
-          this.weatherData.tem_day >= 19 ||
-          this.weatherData.tem_day <= 24
-      ) {
-        this.tips = "天气舒适，适合室外运动";
-      } else {
-        this.tips = "天气炎热，谨防中暑";
-      }
-    },
+    // weatherData() {
+    //   if (this.weatherData.tem_day < 19) {
+    //     this.tips = "天气寒冷，记得多穿衣服";
+    //   } else if (
+    //       this.weatherData.tem_day >= 19 ||
+    //       this.weatherData.tem_day <= 24
+    //   ) {
+    //     this.tips = "天气舒适，适合室外运动";
+    //   } else {
+    //     this.tips = "天气炎热，谨防中暑";
+    //   }
+    // },
     value: {
       immediate: true,
       handler(){

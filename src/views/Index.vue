@@ -17,16 +17,41 @@
             />
             <router-link to="/index/UserInfo" tag="p">{{ name }}</router-link>
           </div>
+
+          <div v-if="isStoreAdmin || isEmployee">
           <el-menu-item index="/index/Schedule">
             <i class="el-icon-s-home"></i>
             <span slot="title">首页</span>
           </el-menu-item>
+          </div>
+
+          <div v-if="isEmployee">
           <el-menu-item index="/index/UserInfo">
             <template slot="title">
               <i class="el-icon-user-solid"></i>
               <span>个人信息</span>
             </template>
           </el-menu-item>
+          </div>
+
+          <div v-if="isStoreAdmin">
+            <el-menu-item index="/index/StoreAdminInfo">
+              <template slot="title">
+                <i class="el-icon-user-solid"></i>
+                <span>个人信息</span>
+              </template>
+            </el-menu-item>
+          </div>
+
+          <div v-if="isEnterpriseAdmin">
+            <el-menu-item index="/index/EnterpriseAdminInfo">
+              <template slot="title">
+                <i class="el-icon-user-solid"></i>
+                <span>个人信息</span>
+              </template>
+            </el-menu-item>
+          </div>
+
 
           <div v-if="isEmployee">
           <el-menu-item index="/index/leave">
@@ -36,7 +61,7 @@
           </div>
 
           <div v-if="isEmployee || isStoreAdmin">
-            <el-menu-item index="/index/Schedule2">
+            <el-menu-item index="/index/Schedule3">
               <i class="el-icon-message-solid"></i>
               <span slot="title">查看排班信息</span>
             </el-menu-item>
@@ -75,9 +100,9 @@
                 <el-menu-item index="/index/LeaveApproval"
                 >请假审批</el-menu-item
                 >
-                <el-menu-item index="/index/ChangeSchedule"
-                >修改排班</el-menu-item
-                >
+<!--                <el-menu-item index="/index/ChangeSchedule"-->
+<!--                >修改排班</el-menu-item-->
+<!--                >-->
               </el-menu-item-group>
             </el-submenu>
           </div>

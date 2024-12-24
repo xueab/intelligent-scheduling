@@ -1,3 +1,4 @@
+<!--忘记密码-->
 <template>
   <div id="page">
     <div id="img-wrapper">

@@ -50,6 +50,7 @@ export default {
     data() {
         return {
             // arr:[],
+          // 排班方案
           arr: [
             // 周一
             [
@@ -80,8 +81,9 @@ export default {
 
           ],
 
-            value2: 'month',
+            // value2: 'month',
             loading: false,
+
             storeArr: [ {
               value: '选项1',
               label: '周一'
@@ -105,9 +107,11 @@ export default {
               label: '周日'
             },
             ],
+
           value: '选项1',
+
             colors:['#01D4F2', '#D8DF20', '#FFE550', '#F6931E', '#BFA', '#FF646C' , '#CB3398', '#33E680', '#B334FF'],
-            month: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+            // month: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
           // day: [
           //   [{ name: 'h1' }, {name: 'h2'}],
           //   [{name: 'h1'}]
@@ -120,6 +124,7 @@ export default {
     created(){
         // this.getStore()
       this.setScheduleData();
+      this.get();
     },
     methods:{
       setScheduleData() {
@@ -127,6 +132,7 @@ export default {
         this.day = this.arr[selectedIndex] || [];
 
       },
+      // 获取日排班
         get(e){
             this.$http({
                 method: 'GET',
@@ -136,15 +142,15 @@ export default {
                 this.loading = false
             })  
         },
-        getStore(){
-        this.$http({
-            method: 'GET',
-            url: 'http://192.168.1.102:8080/Store/stores'
-        }).then( result => {
-            // this.storeArr = result.data.data
-            // this.get()
-        })
-    },
+        // getStore(){
+        // this.$http({
+        //     method: 'GET',
+        //     url: 'http://192.168.1.102:8080/Store/stores'
+        // }).then( result => {
+        //     // this.storeArr = result.data.data
+        //     // this.get()
+        // })
+    // },
     },
     watch:{
         // value(){

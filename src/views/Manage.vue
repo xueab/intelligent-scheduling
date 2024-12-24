@@ -2,12 +2,13 @@
 <template>
   <div id="page">
     <div class="nav">
-      <button style="width: 110px" @click="addManage">添加员工</button>
+<!--      <button style="width: 110px" @click="addManage">添加员工</button>-->
 <!--      <div class="add-type" v-if="show_add">-->
 <!--&lt;!&ndash;        <p @click="page = 0; addInfo()">导入文件添加</p>&ndash;&gt;-->
 <!--        <p @click=addInfo></p>-->
 <!--      </div>-->
       <div>
+
         <select name="" id="" style="outline: none;height: 30px;border: 1px solid #999;border-radius: 4px;" v-model="selected">
           <option value="" disabled selected>选择查看门店</option>
           <option value="">所有门店</option>
@@ -19,8 +20,11 @@
               {{ value.name }}
             </option>
         </select>
+
         <span style="margin: 0px 10px 0px;font-size: 13px;color: #409EFF;">共{{ all }}条数据</span>
+
         <input type="text" placeholder="请输入姓名" v-model="input" style="margin-right: 18px;"/>
+
       </div>
     </div>
 
@@ -49,7 +53,7 @@
           <td>{{ value.email }}</td>
           <td>
             <button @click="change(index)">修改</button>
-            <button :id="value.id" @click="del">删除</button>
+            <button :id="value.id" @click="del(value.id)">删除</button>
           </td>
         </tr>
       </table>
@@ -142,26 +146,26 @@
       </div>
 
       <!-- 点击导入文件添加进入此页面 -->
-      <div v-if="page == 0" v-loading="addLoading">
-        <p style="text-align: center;width: 100%; margin: 50px 0px 30px;font-size: 18px;font-weight: 500;">请选择您要提交的文件</p>
-        <el-upload
-          class="upload-demo"
-          drag
-          action="#"
-          :auto-upload="false"
-          :file-list="list"
-          :on-change="handleChange">
-          <i class="el-icon-upload"></i>
-          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          <div class="el-upload__tip" slot="tip">只能上传xsl/xslx文件</div>
-        </el-upload>
-        <div style="margin-top: 30px">
-          <el-button type="primary" style="margin-right: 30px" @click="confirmUpload"
-            >确认</el-button
-          >
-          <el-button @click="cancel">取消</el-button>
-        </div>
-      </div>
+<!--      <div v-if="page == 0" v-loading="addLoading">-->
+<!--        <p style="text-align: center;width: 100%; margin: 50px 0px 30px;font-size: 18px;font-weight: 500;">请选择您要提交的文件</p>-->
+<!--        <el-upload-->
+<!--          class="upload-demo"-->
+<!--          drag-->
+<!--          action="#"-->
+<!--          :auto-upload="false"-->
+<!--          :file-list="list"-->
+<!--          :on-change="handleChange">-->
+<!--          <i class="el-icon-upload"></i>-->
+<!--          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>-->
+<!--          <div class="el-upload__tip" slot="tip">只能上传xsl/xslx文件</div>-->
+<!--        </el-upload>-->
+<!--        <div style="margin-top: 30px">-->
+<!--          <el-button type="primary" style="margin-right: 30px" @click="confirmUpload"-->
+<!--            >确认</el-button-->
+<!--          >-->
+<!--          <el-button @click="cancel">取消</el-button>-->
+<!--        </div>-->
+<!--      </div>-->
     </div>
     <div class="fade" v-if="show"></div>
 
@@ -200,17 +204,19 @@ export default {
       show_add: false,
       drawer:false,
       val: 1,
-      total: 0,
+      total: 0,       // total page
       loading: false,
       tips: '',
       fit: false,
       note:'',
-      all: 0,
+      all: 0,         // 全部数据
       selected: '',
       addLoading: false,
+      // 输入的姓名
       input: '',
       dialogFormVisible: false,
       list:[],
+      // 添加员工信息
       manage:{
         name: '',
         posts: '',
@@ -219,6 +225,7 @@ export default {
         email: '',
         store: ''
       },
+      // 门店信息
       storeArr: [
         {
           id: "hbyt01",
@@ -229,11 +236,21 @@ export default {
           name: "电力",
         }
       ],
+      // 员工信息
       manages: [
         {name: "h1", post: "员工", id: 1, emai: "123456"},
         {name: "h2", post: "员工", id: 1, emai: "123456"}
       ],
-      user:{},
+      // 员工详情页信息
+      user:{
+        name: '',
+        posts: '',
+        phone: '',
+        address: '',
+        gender: '',
+        id: '',
+        store: '',
+      },
       changeManage:{}
     };
   },
@@ -254,17 +271,17 @@ export default {
     getManage(){
       this.$http({
         method: "GET",
-        url: "http://192.168.136.205:8080/users/pages/" + this.val + '&' + this.selected + '&' + this.input
+        url: "http://localhost:9999/employee/pages/" + this.val + '&' + this.selected + '&' + this.input
       }).then((resp) => {
         this.manages = resp.data.data
-        this.total = parseInt(resp.data.msg)
-        this.all = resp.data.code
+        this.total = parseInt(resp.data.data.total)
+        this.all = resp.data.data.all
       });
     },
     getStore(){
       this.$http({
         method: 'GET',
-        url: 'http://192.168.136.205:8080/Store/stores'
+        url: 'http://localhost:9999/Store/stores'
       }).then( result => {
         this.storeArr = result.data.data
       })
@@ -282,18 +299,19 @@ export default {
       this.dialogFormVisible = false
       this.$http({
         method:'PUT',
-        url: 'http://192.168.136.205:8080/users/employee',
-        data:{
-          'user': this.changeManage
-        }
+        url: 'http://localhost:9999/employee/modify',
+        // data:{
+        //   'user': this.changeManage
+        // }
+        data: this.changeManage
       })
       this.getManage()
     },
     // 删除按钮
-    del(e) {
+    del(id) {
       this.$http({
         method: 'DELETE',
-        url: "http://192.168.136.205:8080/users/" + e.target.id,
+        url: "http://localhost:9999/employee/delete" + id,
       }).then(resp => {
         this.getManage()
         if( resp.data.msg == '删除成功'){
@@ -319,16 +337,16 @@ export default {
     },
     // 电子邮件失去焦点后判断是否被注册
     checkEmail(){
-      this.$http({
-        method: 'GET',
-        url: 'http://192.168.136.205:8080/users/' + this.manage.email
-      }).then(result => {
-        if(result.data.code == 20231){
-          this.tips = result.data.msg
-        }else{
-          this.tips = result.data.msg
-        }
-      })
+      // this.$http({
+      //   method: 'GET',
+      //   url: 'http://192.168.136.205:8080/users/' + this.manage.email
+      // }).then(result => {
+      //   if(result.data.code == 20231){
+      //     this.tips = result.data.msg
+      //   }else{
+      //     this.tips = result.data.msg
+      //   }
+      // })
     },
     handleChange(file , fileList){
       this.list = fileList
