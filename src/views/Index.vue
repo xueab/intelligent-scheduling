@@ -18,11 +18,18 @@
             <router-link to="/index/UserInfo" tag="p">{{ name }}</router-link>
           </div>
 
-          <div v-if="isStoreAdmin || isEmployee">
+          <div v-if="isStoreAdmin">
           <el-menu-item index="/index/Schedule">
             <i class="el-icon-s-home"></i>
             <span slot="title">首页</span>
           </el-menu-item>
+          </div>
+
+          <div v-if="isEmployee">
+            <el-menu-item index="/index/employeeSchedule">
+              <i class="el-icon-s-home"></i>
+              <span slot="title">首页</span>
+            </el-menu-item>
           </div>
 
           <div v-if="isEmployee">
@@ -34,23 +41,23 @@
           </el-menu-item>
           </div>
 
-          <div v-if="isStoreAdmin">
-            <el-menu-item index="/index/StoreAdminInfo">
-              <template slot="title">
-                <i class="el-icon-user-solid"></i>
-                <span>个人信息</span>
-              </template>
-            </el-menu-item>
-          </div>
+<!--          <div v-if="isStoreAdmin">-->
+<!--            <el-menu-item index="/index/StoreAdminInfo">-->
+<!--              <template slot="title">-->
+<!--                <i class="el-icon-user-solid"></i>-->
+<!--                <span>个人信息</span>-->
+<!--              </template>-->
+<!--            </el-menu-item>-->
+<!--          </div>-->
 
-          <div v-if="isEnterpriseAdmin">
-            <el-menu-item index="/index/EnterpriseAdminInfo">
-              <template slot="title">
-                <i class="el-icon-user-solid"></i>
-                <span>个人信息</span>
-              </template>
-            </el-menu-item>
-          </div>
+<!--          <div v-if="isEnterpriseAdmin">-->
+<!--            <el-menu-item index="/index/EnterpriseAdminInfo">-->
+<!--              <template slot="title">-->
+<!--                <i class="el-icon-user-solid"></i>-->
+<!--                <span>个人信息</span>-->
+<!--              </template>-->
+<!--            </el-menu-item>-->
+<!--          </div>-->
 
 
           <div v-if="isEmployee">
@@ -60,8 +67,15 @@
           </el-menu-item>
           </div>
 
-          <div v-if="isEmployee || isStoreAdmin">
+          <div v-if="isStoreAdmin">
             <el-menu-item index="/index/Schedule3">
+              <i class="el-icon-message-solid"></i>
+              <span slot="title">查看排班信息</span>
+            </el-menu-item>
+          </div>
+
+          <div v-if="isEmployee">
+            <el-menu-item index="/index/employeeSchedule1">
               <i class="el-icon-message-solid"></i>
               <span slot="title">查看排班信息</span>
             </el-menu-item>

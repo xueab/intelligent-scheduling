@@ -1,4 +1,4 @@
-<!--首页-->
+<!--员工日排班-->
 <template>
   <div>
     <div class="top-info">
@@ -28,35 +28,8 @@
     <div style="display: flex">
       <div class="schedule">
         <div style="margin-bottom: 10px">
-<!--          <el-radio-group v-model="radio1">-->
-<!--            <el-radio-button label="周排班"></el-radio-button>-->
-<!--            <el-radio-button label="日排班"></el-radio-button>-->
           <el-tag>日排班</el-tag>
-<!--          </el-radio-group>-->
         </div>
-<!--        <table border="1" v-if="radio1 == '周排班'">-->
-<!--          <tr>-->
-<!--            <th>时间</th>-->
-<!--            <th>9:00 - 11:00</th>-->
-<!--            <th>11:00 - 13:00</th>-->
-<!--            <th>13:00 - 15:00</th>-->
-<!--            <th>15:00 - 17:00</th>-->
-<!--            <th>17:00 - 19:00</th>-->
-<!--            <th>19:00 - 21:00</th>-->
-<!--          </tr>-->
-<!--          <tr v-for="(value, index) in arr" :key="index">-->
-<!--            <th>{{ month[index] }}</th>-->
-<!--            <td v-for="(valu, j) in value" :key="j">-->
-<!--              <p-->
-<!--                  v-for="(val, k) in valu"-->
-<!--                  :key="k"-->
-<!--                  :style="{ backgroundColor: colors[k] }"-->
-<!--              >-->
-<!--                {{ val.name }}-->
-<!--              </p>-->
-<!--            </td>-->
-<!--          </tr>-->
-<!--        </table>-->
 
         <table border="1">
           <tr>
@@ -67,13 +40,14 @@
             <th>15:00 - 17:00</th>
             <th>17:00 - 19:00</th>
             <th>19:00 - 21:00</th>
+
           </tr>
 
           <tr>
             <th>{{ date1 | thisDay }}</th>
-                <td v-for="(a, b) in day" :key="b">
-                  <p v-for="(c, d) in a" :key="d" :style="{ backgroundColor: colors[d] }">{{ c.name }}</p>
-                </td>
+            <td v-for="(a, b) in day" :key="b">
+              <p :style="{ backgroundColor: colors[b] }">{{a.time}}</p>
+            </td>
           </tr>
 
 
@@ -102,14 +76,13 @@ export default {
       myStore: "",
       radio1: "周排班",
       storeArr: [],
-      // day: [
-      //     [{name: 'h1'} ,{name: 'h2'}],
-      //     [{name: 'h1'}],
-      //     [{name: 'h1'}]
-      // ],
       day: [
-        [{ name: 'h1' }, {name: 'h2'}],
-        [{name: 'h1'}]
+        {time: '9:00-10:00'},    // 9:00-11:00
+        {time: '11:00-11:30'},                     // 11:00-13:00
+        {},
+        {},
+        {},
+        {},
 
         // 其他班次...
       ],
@@ -129,35 +102,6 @@ export default {
         "#33E680",
         "#B334FF",
       ],
-      // 存储排班信息
-      arr: [
-          // 周一
-          [
-              [{name: 'h1'}, {name: 'h2'}],
-              [{name: 'h3'}],
-              [{name: 'h4'}]
-          ],
-          // 周二
-          [
-              [{name: 'h1'}]
-          ],
-          [
-            [{name: 'h1'}]
-          ],
-          [
-            [{name: 'h1'}]
-          ],
-          [
-            [{name: 'h1'}]
-          ],
-          [
-            [{name: 'h1'}]
-          ],
-          [
-            [{name: 'h1'}]
-          ]
-
-      ],
       value: new Date(),
     };
   },
@@ -176,6 +120,7 @@ export default {
   },
   mounted() {
     this.get();
+    // console.log("date: " + this.date1)
   },
   methods: {
     // 获取日排班信息
@@ -183,7 +128,7 @@ export default {
       this.$http({
         method: "GET",
         url:
-            "http://localhost:9999/schedule/" + localStorage.storeId + '&' + this.date1
+            "http://localhost:9999/employeeSchedule/" + localStorage.id + this.date1,
       }).then((result) => {
         this.arr = result.data.data;
       });
@@ -206,30 +151,6 @@ export default {
       //     console.log(err);
       //   });
     },
-    // getDay(){
-    //   this.$http({
-    //     method: 'GET',
-    //     url: 'http://localhost:9999/schedule/day/' + localStorage.store + '&' +  this.date1
-    //   }).then( result => {
-    //     // this.day = result.data.data
-    //   })
-    // },
-    // getStore() {
-    //   this.$http({
-    //     method: "GET",
-    //     url: "http://localhost:9999/Store/stores",
-    //   }).then((result) => {
-    //     this.storeArr = result.data.data;
-    //     this.get();
-    //   });
-    // },
-    // open2() {
-    //   this.$notify({
-    //     title: "提示",
-    //     message: "请填写您所管理的门店信息，以便使用其他功能！",
-    //     duration: 0,
-    //   });
-    // },
   },
   watch: {
     // weatherData() {

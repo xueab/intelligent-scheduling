@@ -17,6 +17,8 @@ import StoreInformation1 from "@/views/StoreInformation1.vue";
 import Schedule3 from "@/views/Schedule3.vue";
 import StoreAdminInfo from "@/views/StoreAdminInfo.vue";
 import EnterpriseAdminInfo from "@/views/EnterpriseAdminInfo.vue";
+import employeeSchedule from "@/views/employeeSchedule.vue";
+import employeeSchedule1 from "@/views/employeeSchedule1.vue";
 
 
 
@@ -49,6 +51,14 @@ export const constantRouterMap = [
             {
                 path: 'Schedule3',
                 component: Schedule3
+            },
+            {
+                path: 'employeeSchedule',
+                component: employeeSchedule
+            },
+            {
+                path: 'employeeSchedule1',
+                component: employeeSchedule1
             },
             {
                 path: 'StoreInformation',
