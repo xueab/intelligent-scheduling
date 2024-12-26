@@ -52,6 +52,7 @@
             layout="prev, pager, next"
             :page-count="total"
             :current-page="val"
+
         ></el-pagination>
       </div>
     </div>
@@ -161,7 +162,7 @@
         <div class="right">
           <span>性别: </span><span>{{ user.gender ? user.gender : '-' }}</span><br>
           <span>工号: </span><span>{{ user.idCard }}</span><br>
-          <span>所属门店: </span><span>{{ user.store }}</span><br>
+          <span>所属门店: </span><span>{{ user.myStoreName }}</span><br>
         </div>
       </div>
     </el-drawer>
@@ -191,6 +192,7 @@ export default {
       selected: '',
       addLoading: false,
       input: '',
+      myStoreName: '',
       dialogFormVisible: false,
       list:[],
       manage: {
@@ -216,7 +218,7 @@ export default {
         {name: "h1", post: "员工", id: 1, emai: "123456"},
         {name: "h2", post: "员工", id: 1, emai: "123456"}
       ],
-      user:{},
+      user:{myStoreName:""},
       changeManage:{}
     };
   },
@@ -226,6 +228,7 @@ export default {
   },
   watch:{
     input(){
+      this.val = 1; // 重置为第一页
       this.getManage()
     },
     selected(){
@@ -241,9 +244,14 @@ export default {
 
         url: "http://localhost:9999/employee/pages/" + this.val + '&' + this.selected + '&' + this.input
       }).then((resp) => {
+        //console.log(resp.data.data)
         this.manages = resp.data.data.list
+        console.log("this.manages.length"+this.manages.length)
         this.total = resp.data.data.totalPage
         this.all = resp.data.data.totalCount
+       // console.log(this.manages)
+      //  console.log(this.total)
+        //console.log(this.all)
       });
     },
     getStore(){
@@ -416,11 +424,13 @@ export default {
           method: "GET",
           url: "http://localhost:9999/employee/myEmployee/" + e,
         }).then(resp =>{
-          console.log(resp.data.data)
+
           if(resp.data){
             this.loading = false
             this.user = resp.data.data
+            this.user.myStoreName=resp.data.myStoreName
           }
+
         })
       }
     },

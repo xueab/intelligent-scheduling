@@ -261,6 +261,7 @@ export default {
   },
   watch:{
     input(){
+      this.val = 1
       this.getManage()
     },
     selected(){
@@ -276,8 +277,8 @@ export default {
       }).then((resp) => {
         console.log(resp.data.data.list)
         this.manages = resp.data.data.list
-        this.total = parseInt(resp.data.data.total)
-        this.all = resp.data.data.all
+        this.total = resp.data.data.totalPage
+        this.all = resp.data.data.totalCount
       });
     },
     getStore(){

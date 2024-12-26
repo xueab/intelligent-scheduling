@@ -81,7 +81,7 @@
           <td>{{ val.name }}</td>
           <td>{{ val.size }}</td>
           <td>{{ val.address }}</td>
-          <td>{{ val.number }}</td>
+          <td>{{ val.employeeCount }}</td>
           <td>
             <button @click="change(index)">修改</button>
             <button :id="val.id" @click="del(val.id)">删除</button>
@@ -183,6 +183,7 @@ export default {
         url: 'http://localhost:9999/Store/stores'
       }).then( result => {
         this.store = result.data.data
+        //this.store.number=result.data.data.employeeCount
       })
     },
     currentChange(val){
