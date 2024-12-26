@@ -479,6 +479,7 @@ export default defineComponent({
       this.obj.type = this.radio1;
       this.obj.notes = this.notes;
       this.obj.state = 0;
+      this.obj.username = localStorage.name;
       if (this.radio2 == "day") {
         this.obj.startTime = this.value1[0];
         this.obj.endTime = this.value1[1];
