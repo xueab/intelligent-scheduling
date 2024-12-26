@@ -76,8 +76,8 @@
         </tr>
 
         <p v-if="!store.length" style="text-align: center;margin-top: 10px;color: #999;">暂无数据</p>
-        <tr v-for="(val, index) in store" :key="val.id">\
-          <td>{{ val.id }}</td>
+        <tr v-for="(val, index) in store" :key="val.id">
+
           <td>{{ val.name }}</td>
           <td>{{ val.size }}</td>
           <td>{{ val.address }}</td>
@@ -182,7 +182,7 @@ export default {
         method: 'GET',
         url: 'http://localhost:9999/Store/stores'
       }).then( result => {
-        this.storeArr = result.data.data
+        this.store = result.data.data
       })
     },
     currentChange(val){
@@ -198,6 +198,9 @@ export default {
     // 修改排班接口
     sendChange(){
       this.dialogFormVisible = false
+      this.changeStore.name=this.myStore.name
+      this.changeStore.size=this.myStore.size
+      this.changeStore.address=this.myStore.address
       this.$http({
         method:'PUT',
         url: 'http://localhost:9999/Store/modiftyStore',
@@ -215,7 +218,8 @@ export default {
         method: 'DELETE',
         url: "http://localhost:9999/Store/deleteStore/" + id,
       }).then(resp => {
-        this.getManage()
+       // this.getManage()
+        console.log(resp.data.msg)
         if( resp.data.msg == '删除成功'){
           this.open1()
         }else{
@@ -307,7 +311,7 @@ export default {
     },
     // 添加门店信息
     confirm() {
-      if(this.myStore.name.length == 0 || this.myStore.size.length == 0 || this.myStore.address.length == 0){
+      if(this.addStore.name.length == 0 || this.addStore.size.length == 0 || this.addStore.address.length == 0){
         this.note = '输入字段不可为空！'
         this.open2()
       }else{
@@ -318,8 +322,9 @@ export default {
           //   // 'user': this.manage
           //
           // }
-          data: this.myStore,
+          data: this.addStore,
         }).then(result => {
+          console.log(result.data.msg)
           if(result.data.data){
             alert(result.data.msg)
             this.show = false;

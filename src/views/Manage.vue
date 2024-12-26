@@ -32,15 +32,15 @@
       <table border="0" cellpadding="0" cellspacing="0">
         <tr>
           <th>姓名</th>
-          <th>职位</th>
+          <th>店铺号</th>
           <th>工号</th>
-          <th>账户</th>
+          <th>电话</th>
           <th>操作</th>
         </tr>
         <p v-if="!manages.length" style="text-align: center;margin-top: 10px;color: #999;">暂无数据</p>
         <tr v-for="(value,index) in manages" :key="value.id">
           <td>
-            {{ value.name }}&nbsp;
+            {{ value.username }}&nbsp;
             <i
               v-show="!loading"
               class="el-icon-view"
@@ -48,9 +48,9 @@
             ></i>
             <i v-show="loading" class="el-icon-loading"></i>
           </td>
-          <td>{{ value.posts }}</td>
-          <td>{{ value.id }}</td>
-          <td>{{ value.email }}</td>
+          <td>{{ value.store_id }}</td>
+          <td>{{ value.id_card }}</td>
+          <td>{{ value.phone }}</td>
           <td>
             <button @click="change(index)">修改</button>
             <button :id="value.id" @click="del(value.id)">删除</button>
@@ -76,16 +76,17 @@
         class="change"
       >
         <div>
-          <p>姓名：</p><span>{{ changeManage.name }}</span><br><br>
+          <p>姓名：</p><span>{{ changeManage.username }}</span><br><br>
           <label for="name">职位: </label>
           <input type="text" name="" id="name" v-model="changeManage.posts"/><br /><br />
           <label for="area">账户: </label>
           <input type="text" name="" id="area" v-model="changeManage.email"/><br /><br />
           <p>所属门店: </p>
-          <select name="" id="" v-model="changeManage.store">
+          <select name="store" id="store_id" v-model="changeManage.storeId">
             <option
-              :value="value.id"
+
               v-for="(value, index) in storeArr"
+              :value="value.id"
               :key="index"
             >
               {{ value.name }}
@@ -109,7 +110,7 @@
         <div style="display: flex">
           <div>
             <label for="name">姓名</label><br />
-            <input type="text" id="name" v-model="manage.name" /><br />
+            <input type="text" id="name" v-model="manage.username" /><br />
             <label for="phone">电话</label><br />
             <input type="text" id="phone" v-model="manage.phone" maxlength="11" />
           </div>
@@ -179,7 +180,7 @@
           <p>{{ user.name }}</p>
         </div>
         <div class="left">
-          <span>姓名: </span><span>{{ user.name }}</span><br>
+          <span>姓名: </span><span>{{ user.username }}</span><br>
           <span>职位: </span><span>{{ user.posts }}</span><br>
           <span>电话: </span><span>{{ user.phone }}</span><br>
           <span>住址: </span><span>{{ user.address ? user.address : '-' }}</span>
@@ -273,7 +274,8 @@ export default {
         method: "GET",
         url: "http://localhost:9999/employee/pages/" + this.val + '&' + this.selected + '&' + this.input
       }).then((resp) => {
-        this.manages = resp.data.data
+        console.log(resp.data.data.list)
+        this.manages = resp.data.data.list
         this.total = parseInt(resp.data.data.total)
         this.all = resp.data.data.all
       });
@@ -311,7 +313,7 @@ export default {
     del(id) {
       this.$http({
         method: 'DELETE',
-        url: "http://localhost:9999/employee/delete" + id,
+        url: "http://localhost:9999/employee/delete/" + id,
       }).then(resp => {
         this.getManage()
         if( resp.data.msg == '删除成功'){
