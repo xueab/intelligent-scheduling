@@ -104,7 +104,7 @@ export default {
 .page{
     padding-top: 45px;
     padding-left: 41px;
-    
+
 }
 .title{
     font-size: 22px;

@@ -169,7 +169,11 @@
             mode="horizontal"
             :router="true"
           >
-            <el-menu-item index="/index">排班首页</el-menu-item>
+
+            <el-menu-item v-if="isEmployee" index="/index/employeeSchedule">排班首页</el-menu-item>
+            <el-menu-item v-if="isStoreAdmin" index="/index/Schedule">排班首页</el-menu-item>
+
+
             <el-menu-item index="/index/leave" v-if="isEmployee">请假申请</el-menu-item>
             <el-submenu index="2" v-if="isStoreAdmin">
               <template slot="title">我的工作台</template>
