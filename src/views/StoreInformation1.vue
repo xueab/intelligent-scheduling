@@ -144,10 +144,11 @@ export default {
     getMyStore(){
       this.$http({
         method: 'GET',
-        url: 'http://192.168.1.102:8080/Store/store/' + localStorage.email
+        //url: 'http://localhost:9999/Store/store/' + localStorage.storeId
+        url: 'http://localhost:9999/Store/store/' + 1
       }).then( result => {
-        // this.myStore = result.data.data
-        this.getStore(result.data.data.id)
+        this.myStore = result.data.data
+      //  this.getStore(result.data.data.id)
       })
     },
     change(){

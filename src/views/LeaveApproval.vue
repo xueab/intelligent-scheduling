@@ -13,14 +13,14 @@
         <div class="list" v-for="(item,index) in arr " :key="index">
             <div style="width: 70px;">
                 <p class="tips">姓名</p>
-                <p>{{ item.name }}</p>
+                <p>{{ item.employeeName }}</p>
             </div>
             <div>
                 <p class="tips">请假类型</p>
-                <div v-if="item.type == '病假' ">
+                <div v-if="item.leaveType == '病假' ">
                     <span class="circle" style="background-color: #F65160;"></span><span>病假</span>
                 </div>
-                <div v-else-if="item.type == '事假' ">
+                <div v-else-if="item.leaveType == '事假' ">
                     <span class="circle" style="background-color: #6D5DD3;"></span><span>事假</span>
                 </div>
                 <div v-else>
@@ -44,12 +44,15 @@
             </div>
             <div style="width: 200px;">
                 <p class="tips">状态</p>
-                <p v-if="item.state == 0">
+                <p v-if="item.status == 0">
                     <el-button type="primary" @click.prevent="agree(item.id, index, 1)">同意</el-button>
-                    <el-button @click.prevent="agree(item.id, index , 2)">取消</el-button>
+                    <el-button @click.prevent="agree(item.id, index , 2)">拒绝</el-button>
                 </p>
-                <div style="width: 10px;height: 10px;" v-if="item.state != 0">
-                    <i class="el-icon-check"></i>
+                <div style="width: 10px; height: 10px;" v-if="item.status === 1">
+                  <i class="el-icon-check"></i>
+                </div>
+                <div style="width: 10px; height: 10px;" v-else-if="item.status === 2">
+                  <i class="el-icon-close"></i>
                 </div>
             </div>
         </div>
@@ -72,22 +75,19 @@ export default {
         getData(){
             this.$http({
                 method: 'GET',
-                url: 'http://localhost:9999/Holiday/trans' + localStorage.storeId
+               // url: 'http://localhost:9999/Holiday/trans/' + localStorage.storeId
+              url: 'http://localhost:9999/Holiday/trans/' + 1
             }).then((result) => {
-                this.arr = result.data
+              console.log(result.data.leaveList)
+                this.arr = result.data.leaveList
             })
         },
         agree(e,i,j){
             this.arr[i].state = 1
             this.$http({
                 method: 'POST',
-                url: 'http://localhost:9999/Holiday/Update',
-                data:{
-                    'holiday':{
-                        'id': e,
-                        'state': j
-                    }
-                }
+                url: 'http://localhost:9999/Holiday/Update/'+e+'&'+j,
+
             })
 
         },
