@@ -31,9 +31,9 @@
           </div>
         </div>
         <div class="statistics-font">调休</div>
-        <div class="statistics-bottom-font">
-          {{ my_compensatory_leave }} /16天可用
-        </div>
+<!--        <div class="statistics-bottom-font">-->
+<!--          {{ my_compensatory_leave }} /16次可用-->
+<!--        </div>-->
       </div>
       <div class="sick_leave">
         <div
@@ -58,7 +58,7 @@
           </div>
         </div>
         <div class="statistics-font">病假</div>
-        <div class="statistics-bottom-font">{{ my_sick_leave }} /12天可用</div>
+<!--        <div class="statistics-bottom-font">{{ my_sick_leave }} /12次可用</div>-->
       </div>
       <div class="Leave">
         <div
@@ -83,9 +83,9 @@
           </div>
         </div>
         <div class="statistics-font">事假</div>
-        <div class="statistics-bottom-font">
-          {{ my_leave_absence }} /6天可用
-        </div>
+<!--        <div class="statistics-bottom-font">-->
+<!--          {{ my_leave_absence }} /6次可用-->
+<!--        </div>-->
       </div>
     </div>
 
@@ -187,10 +187,10 @@
             <div>事假</div>
           </div>
         </div>
-        <div class="duration">
-          <div class="Recording_title_one">期间</div>
-          <div class="Recording_content_one">{{ val.time }}</div>
-        </div>
+<!--        <div class="duration">-->
+<!--          <div class="Recording_title_one">期间</div>-->
+<!--          <div class="Recording_content_one">{{ val.time }}</div>-->
+<!--        </div>-->
         <div class="start_duration">
           <div class="Recording_title_one">开始日期</div>
           <div class="Recording_content_one">{{ val.startTime }}</div>
@@ -225,67 +225,67 @@
           <div class="leave_type_title">请求类型</div>
           <div class="leave_type_body">
             <div class="leave_type_radio">
-              <el-radio v-model="radio1" label="Rest" border>调休</el-radio>
-              <el-radio v-model="radio1" label="sick_leave" border
+              <el-radio v-model="radio1" label="调休" border>调休</el-radio>
+              <el-radio v-model="radio1" label="病假" border
               >病假</el-radio
               >
-              <el-radio v-model="radio1" label="Leave" border>事假</el-radio>
+              <el-radio v-model="radio1" label="事假" border>事假</el-radio>
             </div>
-            <div class="radio_group">
-              <div
-                  class="el-radio-group"
-                  role="radiogroup"
-                  aria-label="radio-group"
-                  id="el-id-2567-3"
-              >
-                <label
-                    data-v-b066d947=""
-                    class="el-radio-button is-active el-radio-button--large"
-                    aria-checked="true"
-                    style="margin: 4px 4px 4px 4px"
-                >
-                  <input
-                      class="el-radio-button__orig-radio"
-                      v-model="radio2"
-                      type="radio"
-                      name="el-id-2567-2"
-                      value="day"
-                  />
-                  <span
-                      class="el-radio-button__inner"
-                      style="border-radius: 56px"
-                      @click="open_day"
-                  >天</span
-                  >
-                </label>
-                <label
-                    data-v-b066d947=""
-                    class="el-radio-button el-radio-button--large"
-                    style="margin: 4px 4px 4px 4px"
-                >
-                  <input
-                      class="el-radio-button__orig-radio"
-                      type="radio"
-                      v-model="radio2"
-                      name="el-id-2567-2"
-                      value="hour"
-                  />
-                  <span
-                      class="el-radio-button__inner"
-                      style="border-radius: 56px"
-                      @click="open_hour"
-                  >小时</span
-                  >
-                </label>
-              </div>
-            </div>
+<!--            <div class="radio_group">-->
+<!--              <div-->
+<!--                  class="el-radio-group"-->
+<!--                  role="radiogroup"-->
+<!--                  aria-label="radio-group"-->
+<!--                  id="el-id-2567-3"-->
+<!--              >-->
+<!--                <label-->
+<!--                    data-v-b066d947=""-->
+<!--                    class="el-radio-button is-active el-radio-button&#45;&#45;large"-->
+<!--                    aria-checked="true"-->
+<!--                    style="margin: 4px 4px 4px 4px"-->
+<!--                >-->
+<!--                  <input-->
+<!--                      class="el-radio-button__orig-radio"-->
+<!--                      v-model="radio2"-->
+<!--                      type="radio"-->
+<!--                      name="el-id-2567-2"-->
+<!--                      value="day"-->
+<!--                  />-->
+<!--                  <span-->
+<!--                      class="el-radio-button__inner"-->
+<!--                      style="border-radius: 56px"-->
+<!--                      @click="open_day"-->
+<!--                  >天</span-->
+<!--                  >-->
+<!--                </label>-->
+<!--                <label-->
+<!--                    data-v-b066d947=""-->
+<!--                    class="el-radio-button el-radio-button&#45;&#45;large"-->
+<!--                    style="margin: 4px 4px 4px 4px"-->
+<!--                >-->
+<!--                  <input-->
+<!--                      class="el-radio-button__orig-radio"-->
+<!--                      type="radio"-->
+<!--                      v-model="radio2"-->
+<!--                      name="el-id-2567-2"-->
+<!--                      value="hour"-->
+<!--                  />-->
+<!--                  <span-->
+<!--                      class="el-radio-button__inner"-->
+<!--                      style="border-radius: 56px"-->
+<!--                      @click="open_hour"-->
+<!--                  >小时</span-->
+<!--                  >-->
+<!--                </label>-->
+<!--              </div>-->
+<!--            </div>-->
 
             <div class="dialog_data">
               <div class="block" v-show="open_block">
                 <el-date-picker
                     v-model="value1"
                     type="daterange"
-                    value-format="yyyy-MM-dd HH:mm:ss"
+                    value-format="yyyy-MM-dd"
                     style="margin-left: -13px"
                     range-separator="至"
                     start-placeholder="开始日期"
@@ -297,7 +297,7 @@
                 <el-date-picker
                     v-model="value2"
                     type="datetimerange"
-                    value-format="yyyy-MM-dd HH:mm:ss"
+                    value-format="yyyy-MM-dd"
                     style="margin-left: -34px"
                     popper-class="dialog_data_picker"
                     start-placeholder="开始日期"
@@ -409,7 +409,7 @@ export default defineComponent({
   data() {
     return {
       radio2: "day",
-      radio1: "Rest",
+      radio1: "调休",
       dialogSalesclerksFormVisible: false,
       message_icon_state: true,
       dialogVisible: false,
@@ -454,7 +454,7 @@ export default defineComponent({
     getNotes() {
       this.$http({
         method: "GET",
-        url: "http://localhost:9999/Holiday/notes/" + localStorage.email,
+        url: "http://localhost:9999/Holiday/notes/" + localStorage.id,
       }).then((result) => {
         // console.log(result.data.data);
         this.noteObj = result.data.data;
@@ -473,8 +473,9 @@ export default defineComponent({
       }
     },
     dialog_submit() {
-      this.obj.name = localStorage.name;
-      this.obj.email = localStorage.email;
+      // this.obj.name = localStorage.name;
+      // this.obj.email = localStorage.email;
+      this.obj.id = localStorage.id;
       this.obj.type = this.radio1;
       this.obj.notes = this.notes;
       this.obj.state = 0;
@@ -485,11 +486,11 @@ export default defineComponent({
         this.obj.startTime = this.value2[0];
         this.obj.endTime = this.value2[1];
       }
+      console.log(this.obj)
       this.$http({
         method: "POST",
         url: "http://localhost:9999/Holiday/Save",
         // data: {
-        //   holiday: this.obj,
         // },
         data: this.obj,
       }).then((result) => {

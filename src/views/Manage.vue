@@ -413,7 +413,7 @@ export default {
       }else{
         this.$http({
           method: 'POST',
-          url: 'http://192.168.136.205:8080/users/',
+          url: 'http://localhost:9999/employee/add',
           data: {
             'user': this.manage
           }
