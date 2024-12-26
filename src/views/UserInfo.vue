@@ -1,7 +1,7 @@
 <template>
   <div class="info">
     <div class="main-wrapper">
-      <el-descriptions class="margin-top" title="个人信息" :column="2"  border v-loading="user.name == undefined">
+      <el-descriptions class="margin-top" title="个人信息" :column="2"  border v-loading="user.username == undefined">
 
         <template slot="extra">
           <el-button type="primary" size="small" @click="change">修改</el-button>
@@ -12,7 +12,7 @@
             <i class="el-icon-user"></i>
             姓名
           </template>
-          {{ user.name }}
+          {{ user.username }}
         </el-descriptions-item>
 
         <el-descriptions-item>
@@ -103,47 +103,98 @@
       <p>修改个人信息</p>
       <div class="wrapper">
         <div style="display: flex; justify-content: center;">
-          <div>
-            <label for="name">姓名：</label><input type="text" id="name" ref="name" :value="user.name"><br><br>
-            <label for="gender">性别：</label><input type="text" id="gender" ref="gender" :value="user.gender"><br><br>
-            <label for="age">年龄：</label><input type="text" id="age" ref="age" :value="user.age"><br><br>
-            <label for="address">联系地址：</label><input type="text" id="address" ref="address" :value="user.address"><br><br>
-            <label for="phone">电话：</label><input type="text" id="phone" ref="phone" :value="user.phone"><br><br>
-          </div>
+<!--          <div>-->
+<!--&lt;!&ndash;            <label for="name">姓名：</label><input type="text" id="name" ref="name" :value="user.username"><br><br>&ndash;&gt;-->
+<!--&lt;!&ndash;            <label for="gender">性别：</label><input type="text" id="gender" ref="gender" :value="user.gender"><br><br>&ndash;&gt;-->
+<!--&lt;!&ndash;            <label for="age">年龄：</label><input type="text" id="age" ref="age" :value="user.age"><br><br>&ndash;&gt;-->
+<!--&lt;!&ndash;            <label for="address">联系地址：</label><input type="text" id="address" ref="address" :value="user.address"><br><br>&ndash;&gt;-->
+<!--&lt;!&ndash;            <label for="phone">电话：</label><input type="text" id="phone" ref="phone" :value="user.phone"><br><br>&ndash;&gt;-->
+
+<!--&lt;!&ndash;            <label for="name">姓名：{{user.username}}</label>&ndash;&gt;-->
+<!--&lt;!&ndash;            <label for="gender">性别：{{user.gender}}</label>&ndash;&gt;-->
+<!--&lt;!&ndash;            <label for="age">年龄：{{user.age}}</label>&ndash;&gt;-->
+<!--&lt;!&ndash;            <label for="address">联系地址：</label><input type="text" id="address" ref="address" :value="user.address"><br><br>&ndash;&gt;-->
+<!--&lt;!&ndash;            <label for="phone">电话：</label><input type="text" id="phone" ref="phone" :value="user.phone"><br><br>&ndash;&gt;-->
+<!--          </div>-->
           <div>
             <div>
-              <label>工作日偏好：</label>
-              <el-select v-model="user.day"  placeholder="请选择">
-                <el-option label="周一" :value="1"></el-option>
-                <el-option label="周二" :value="2"></el-option>
-                <el-option label="周三" :value="3"></el-option>
-                <el-option label="周四" :value="4"></el-option>
-                <el-option label="周五" :value="5"></el-option>
-                <el-option label="周六" :value="6"></el-option>
-                <el-option label="周日" :value="7"></el-option>
-              </el-select>
-            </div>
-            <div style="margin-top: 35px;">
-              <label>工作时间偏好：</label>
-              <el-select v-model="user.date" ref="date" placeholder="请选择">
-                <el-option label="8点- 12点" value="8点-12点"></el-option>
-                <el-option label="12点 - 16点" value="12点-16点"></el-option>
-                <el-option label="16点 - 20点" value="16点-20点"></el-option>
-                <el-option label="20点 - 24点" value="20点-24点"></el-option>
-              </el-select>
-            </div>
-            <div style="margin-top: 28px;">
-              <label>班次时长偏好：</label>
-              <el-select v-model="user.time" ref="time" placeholder="请选择">
-                <el-option label="两小时" :value="2"></el-option>
-                <el-option label="三小时" :value="3"></el-option>
-                <el-option label="四小时" :value="4"></el-option>
-              </el-select>
+<!--              <label for="address">联系地址：</label><input style="overflow-x: auto" type="text" id="address" ref="address" :value="user.address"><br><br>-->
+<!--              <label for="address">联系地址：</label>-->
+<!--              <el-input type="text" id="address" ref="address" v-model="user.address"/><br><br>-->
+<!--              <label for="phone">电话：</label><input type="text" id="phone" ref="phone" :value="user.phone"><br><br>-->
+
+              <el-form :model="user" label-width="120px">
+                <el-form-item label="联系地址：" prop="address">
+                  <el-input v-model="user.address" />
+                </el-form-item>
+
+                <el-form-item label="电话：" prop="phone">
+                  <el-input v-model="user.phone" />
+                </el-form-item>
+
+                <el-form-item label="工作日偏好">
+                  <el-select v-model="user.day" placeholder="请选择">
+                    <el-option label="周一" :value="1"></el-option>
+                    <el-option label="周二" :value="2"></el-option>
+                    <el-option label="周三" :value="3"></el-option>
+                    <el-option label="周四" :value="4"></el-option>
+                    <el-option label="周五" :value="5"></el-option>
+                    <el-option label="周六" :value="6"></el-option>
+                    <el-option label="周日" :value="7"></el-option>
+                  </el-select>
+                </el-form-item>
+
+                <el-form-item label="工作时间偏好">
+                  <el-select v-model="user.date" placeholder="请选择">
+                    <el-option label="8点- 12点" value="8点-12点"></el-option>
+                    <el-option label="12点 - 16点" value="12点-16点"></el-option>
+                    <el-option label="16点 - 20点" value="16点-20点"></el-option>
+                    <el-option label="20点 - 24点" value="20点-24点"></el-option>
+                  </el-select>
+
+                </el-form-item>
+
+                <el-form-item label="班次时长偏好">
+                  <el-select v-model="user.time" placeholder="请选择">
+                  <el-option label="两小时" :value="2"></el-option>
+                  <el-option label="三小时" :value="3"></el-option>
+                  <el-option label="四小时" :value="4"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-form>
+
+<!--              <label>工作日偏好：</label>-->
+<!--              <el-select v-model="user.day"  placeholder="请选择">-->
+<!--                <el-option label="周一" :value="1"></el-option>-->
+<!--                <el-option label="周二" :value="2"></el-option>-->
+<!--                <el-option label="周三" :value="3"></el-option>-->
+<!--                <el-option label="周四" :value="4"></el-option>-->
+<!--                <el-option label="周五" :value="5"></el-option>-->
+<!--                <el-option label="周六" :value="6"></el-option>-->
+<!--                <el-option label="周日" :value="7"></el-option>-->
+<!--              </el-select>-->
+<!--            </div>-->
+<!--            <div style="margin-top: 35px;">-->
+<!--              <label>工作时间偏好：</label>-->
+<!--              <el-select v-model="user.date" ref="date" placeholder="请选择">-->
+<!--                <el-option label="8点- 12点" value="8点-12点"></el-option>-->
+<!--                <el-option label="12点 - 16点" value="12点-16点"></el-option>-->
+<!--                <el-option label="16点 - 20点" value="16点-20点"></el-option>-->
+<!--                <el-option label="20点 - 24点" value="20点-24点"></el-option>-->
+<!--              </el-select>-->
+<!--            </div>-->
+<!--            <div style="margin-top: 28px;">-->
+<!--              <label>班次时长偏好：</label>-->
+<!--              <el-select v-model="user.time" ref="time" placeholder="请选择">-->
+<!--                <el-option label="两小时" :value="2"></el-option>-->
+<!--                <el-option label="三小时" :value="3"></el-option>-->
+<!--                <el-option label="四小时" :value="4"></el-option>-->
+<!--              </el-select>-->
             </div>
           </div>
         </div>
         <div>
-          <el-button type="primary" @click="define">确认修改</el-button>
+          <el-button type="primary" @click="define" style="margin-top: 20px">确认修改</el-button>
           <el-button @click="cancel">取消</el-button>
         </div>
 
@@ -183,8 +234,11 @@ export default {
       method: 'GET',
       url: 'http://localhost:9999/users/' + localStorage.email
     }).then(resp => {
-      // console.log(resp.data.data); // 查看返回的数据
+      console.log(resp.data.data); // 查看返回的数据
       this.user = resp.data.data
+      document.body.style.overflow='hidden';
+
+
     })
   },
   methods:{
@@ -193,14 +247,17 @@ export default {
       document.body.style.overflow='hidden';
     },
     define(){
-      this.user.name = this.$refs.name.value
-      this.user.gender = this.$refs.gender.value
-      this.user.age = this.$refs.age.value
-      this.user.address = this.$refs.address.value
-      this.user.phone = this.$refs.phone.value
+      // this.user.username = this.$refs.username.value
+      // this.user.gender = this.$refs.gender.value
+      // this.user.age = this.$refs.age.value
+      // this.user.address = this.$refs.address.value
+      // this.user.phone = this.$refs.phone.value
+      // this.user.day = this.$ref.day.value
+      // this.user.date = this.$ref.date.value
+      // this.user.time = this.$ref.time.value
       this.$http({
         method: 'PUT',
-        url: 'http://localhost:9999/users/info',
+        url: 'http://localhost:9999/users/info/' + localStorage.email,
         // data: {
         //   'user':this.user
         // }
