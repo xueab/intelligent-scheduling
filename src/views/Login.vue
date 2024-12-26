@@ -136,7 +136,17 @@ export default {
           localStorage.storeId = resp.data.data.storeId;
           // localStorage.admin = this.account.admin;
           localStorage.type = this.account.type;
-          this.$router.replace("/index");
+          // 根据 type 值重定向
+          if (this.account.type == 1) {
+            this.$router.replace("/employeeSchedule");
+          } else if (this.account.type == 2) {
+            this.$router.replace("/Storeinfomation");
+          } else if (this.account.type == 3) {
+            this.$router.replace("/Schedule");
+          } else {
+            // 默认的重定向路径
+            this.$router.replace("/index");
+          }
         } else {
           this.tips = resp.data.msg;
           this.change();
