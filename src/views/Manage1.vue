@@ -21,13 +21,13 @@
           <th>姓名</th>
           <th>职位</th>
           <th>工号</th>
-          <th>账户</th>
+          <th>电话</th>
           <th>操作</th>
         </tr>
         <p v-if="!manages.length" style="text-align: center;margin-top: 10px;color: #999;">暂无数据</p>
         <tr v-for="(value,index) in manages" :key="value.id">
           <td>
-            {{ value.name }}&nbsp;
+            {{ value.username }}&nbsp;
             <i
                 v-show="!loading"
                 class="el-icon-view"
@@ -37,7 +37,7 @@
           </td>
           <td>{{ value.posts }}</td>
           <td>{{ value.id }}</td>
-          <td>{{ value.email }}</td>
+          <td>{{ value.phone }}</td>
           <td>
             <button @click="change(index)">修改</button>
             <button :id="value.id" @click="del(value.id)">删除</button>
@@ -63,21 +63,14 @@
           class="change"
       >
         <div>
-          <p>姓名：</p><span>{{ changeManage.name }}</span><br><br>
+          <p>姓名：</p><span>{{ changeManage.username }}</span><br><br>
           <label for="name">职位: </label>
           <input type="text" name="" id="name" v-model="changeManage.posts"/><br /><br />
-          <label for="area">账户: </label>
-          <input type="text" name="" id="area" v-model="changeManage.email"/><br /><br />
-          <p>所属门店: </p>
-          <select name="" id="" v-model="changeManage.store">
-            <option
-                :value="value.id"
-                v-for="(value, index) in storeArr"
-                :key="index"
-            >
-              {{ value.name }}
-            </option>
-          </select>
+          <label for="area">电话: </label>
+          <input type="text" name="" id="area" v-model="changeManage.phone"/><br /><br />
+
+
+
         </div>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -163,10 +156,10 @@
         :with-header="false">
       <div class="outer">
         <div class="top">
-          <p>{{ user.name }}</p>
+          <p>{{ user.username }}</p>
         </div>
         <div class="left">
-          <span>姓名: </span><span>{{ user.name }}</span><br>
+          <span>姓名: </span><span>{{ user.username }}</span><br>
           <span>职位: </span><span>{{ user.posts }}</span><br>
           <span>电话: </span><span>{{ user.phone }}</span><br>
           <span>住址: </span><span>{{ user.address ? user.address : '-' }}</span>
@@ -250,7 +243,7 @@ export default {
         method: "GET",
         url: "http://localhost:9999/employee/pages/" + this.val + '&' + this.selected + '&' + this.input
       }).then((resp) => {
-        this.manages = resp.data.data
+        this.manages = resp.data.data.list
         this.total = parseInt(resp.data.msg)
         this.all = resp.data.code
       });
