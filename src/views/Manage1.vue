@@ -21,23 +21,23 @@
           <th>姓名</th>
           <th>职位</th>
           <th>工号</th>
-          <th>账户</th>
+          <th>电话</th>
           <th>操作</th>
         </tr>
         <p v-if="!manages.length" style="text-align: center;margin-top: 10px;color: #999;">暂无数据</p>
         <tr v-for="(value,index) in manages" :key="value.id">
           <td>
-            {{ value.name }}&nbsp;
+            {{ value.username }}&nbsp;
             <i
                 v-show="!loading"
                 class="el-icon-view"
-                @click="drawer = true; showMessage(value.email)"
+                @click="drawer = true; showMessage(value.phone)"
             ></i>
             <i v-show="loading" class="el-icon-loading"></i>
           </td>
           <td>{{ value.posts }}</td>
           <td>{{ value.id }}</td>
-          <td>{{ value.email }}</td>
+          <td>{{ value.phone }}</td>
           <td>
             <button @click="change(index)">修改</button>
             <button :id="value.id" @click="del(value.id)">删除</button>
@@ -63,21 +63,14 @@
           class="change"
       >
         <div>
-          <p>姓名：</p><span>{{ changeManage.name }}</span><br><br>
+          <p>姓名：</p><span>{{ changeManage.username }}</span><br><br>
           <label for="name">职位: </label>
           <input type="text" name="" id="name" v-model="changeManage.posts"/><br /><br />
-          <label for="area">账户: </label>
-          <input type="text" name="" id="area" v-model="changeManage.email"/><br /><br />
-          <p>所属门店: </p>
-          <select name="" id="" v-model="changeManage.store">
-            <option
-                :value="value.id"
-                v-for="(value, index) in storeArr"
-                :key="index"
-            >
-              {{ value.name }}
-            </option>
-          </select>
+          <label for="area">电话: </label>
+          <input type="text" name="" id="area" v-model="changeManage.phone"/><br /><br />
+
+
+
         </div>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -96,15 +89,17 @@
           <div style="display: flex">
             <div>
               <label for="name">姓名</label><br />
-              <input type="text" id="name" v-model="manage.name" /><br />
+              <input type="text" id="name" v-model="manage.username" /><br />
               <label for="phone">电话</label><br />
               <input type="text" id="phone" v-model="manage.phone" maxlength="11" />
             </div>
             <div>
               <label for="name">职位</label><br />
-              <input type="text" id="position" v-model="manage.posts" /><br />
+              <input type="text" id="position" v-model="manage.positionId" /><br />
               <label for="idCard">身份证</label><br />
               <input type="text" id="idCard" v-model="manage.idCard" maxlength="18" />
+              <label for="password">登陆密码</label><br />
+              <input type="text" id="password" v-model="manage.password" maxlength="18" />
             </div>
           </div>
           <div style="display: flex; align-items: center">
@@ -112,16 +107,8 @@
               <label for="email" style="width: 460px">电子邮箱 &nbsp; &nbsp;<span style="font-size: 13px; color: red;">{{ tips }} </span></label><br />
               <input type="email" id="email" v-model="manage.email" @blur="checkEmail" style="width: 460px" />
             </div>
-            <select name="" id="select" v-model="manage.store">
-              <option value="" disabled selected>选择门店</option>
-              <option
-                  :value="value.id"
-                  v-for="(value, index) in storeArr"
-                  :key="index"
-              >
-                {{ value.name }}
-              </option>
-            </select>
+
+
           </div>
           <div style="margin-top: 30px">
             <el-button type="primary" style="margin-right: 30px" @click="confirm" ref="confirm"
@@ -163,17 +150,17 @@
         :with-header="false">
       <div class="outer">
         <div class="top">
-          <p>{{ user.name }}</p>
+          <p>{{ user.username }}</p>
         </div>
         <div class="left">
-          <span>姓名: </span><span>{{ user.name }}</span><br>
+          <span>姓名: </span><span>{{ user.username }}</span><br>
           <span>职位: </span><span>{{ user.posts }}</span><br>
           <span>电话: </span><span>{{ user.phone }}</span><br>
           <span>住址: </span><span>{{ user.address ? user.address : '-' }}</span>
         </div>
         <div class="right">
           <span>性别: </span><span>{{ user.gender ? user.gender : '-' }}</span><br>
-          <span>工号: </span><span>{{ user.id }}</span><br>
+          <span>工号: </span><span>{{ user.idCard }}</span><br>
           <span>所属门店: </span><span>{{ user.store }}</span><br>
         </div>
       </div>
@@ -183,6 +170,8 @@
 
 <script>
 // import {post} from "axios";
+
+import manage from "@/views/Manage.vue";
 
 export default {
   name:'Manage',
@@ -248,11 +237,13 @@ export default {
     getManage(){
       this.$http({
         method: "GET",
+       // url: "http://localhost:9999/employee/pages/" + this.val + '&' + localStorage.storeId + '&' + this.input
+
         url: "http://localhost:9999/employee/pages/" + this.val + '&' + this.selected + '&' + this.input
       }).then((resp) => {
-        this.manages = resp.data.data
-        this.total = parseInt(resp.data.msg)
-        this.all = resp.data.code
+        this.manages = resp.data.data.list
+        this.total = resp.data.data.totalPage
+        this.all = resp.data.data.totalCount
       });
     },
     getStore(){
@@ -288,7 +279,7 @@ export default {
     del(id) {
       this.$http({
         method: 'DELETE',
-        url: "http://localhost:9999/employee/delete" + id,
+        url: "http://localhost:9999/employee/delete/" + id,
       }).then(resp => {
         this.getManage()
         if( resp.data.msg == '删除成功'){
@@ -380,17 +371,22 @@ export default {
     },
     // 点击确定添加员工按钮
     confirm() {
-      if(this.manage.name.length == 0 || this.manage.posts.length == 0 || this.manage.phone.length == 0 ||
-          this.manage.idCard.length == 0 || this.manage.email.length == 0 || this.manage.store.length == 0){
+      if(this.manage.username.length == 0 || this.manage.positionId.length == 0 || this.manage.phone.length == 0 ||
+          this.manage.idCard.length == 0 || this.manage.email.length == 0 || this.manage.password.length == 0){
+
+
         this.note = '输入字段不可为空！'
         this.open2()
       }else{
+        manage.storeId=localStorage.storeId
+        manage.storeId=1
         this.$http({
           method: 'POST',
-          url: 'http://localhost:9999/employee/add' + localStorage.storeId,
+          url: 'http://localhost:9999/employee/add',
           // data: {
           //   'user': this.manage
           // }
+
           data: this.manage
 
         }).then(result => {
@@ -418,8 +414,9 @@ export default {
         this.loading = true
         this.$http({
           method: "GET",
-          url: "http://192.168.136.205:8080/users/" + e,
+          url: "http://localhost:9999/employee/myEmployee/" + e,
         }).then(resp =>{
+          console.log(resp.data.data)
           if(resp.data){
             this.loading = false
             this.user = resp.data.data
