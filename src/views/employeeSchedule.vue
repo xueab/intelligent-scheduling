@@ -128,9 +128,14 @@ export default {
       this.$http({
         method: "GET",
         url:
-            "http://localhost:9999/employeeSchedule/" + localStorage.id + this.date1,
+            "http://localhost:9999/employee/Schedule?id=" + localStorage.id +'&date='+ this.date1,
       }).then((result) => {
-        this.arr = result.data.data;
+
+        this.day = result.data.data;
+        console.log('11111111111111')
+        console.log(result.data.data);
+        console.log('222222222222222')
+        console.log(this.day);
       });
     },
     getWeather() {

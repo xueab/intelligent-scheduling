@@ -183,7 +183,7 @@ export default {
       this.$http({
         method: "GET",
         url:
-            "http://localhost:9999/schedule/" + localStorage.storeId + '&' + this.date1
+            "http://localhost:9999/schedule?" + localStorage.storeId + '&' + this.date1
       }).then((result) => {
         this.arr = result.data.data;
       });
@@ -258,7 +258,7 @@ export default {
         }
         this.date1 = year + '-' + month + '-' + date
         this.get()
-        this.getDay()
+        //this.getDay()
       }
     },
   },
