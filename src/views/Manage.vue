@@ -44,12 +44,12 @@
             <i
               v-show="!loading"
               class="el-icon-view"
-              @click="drawer = true; showMessage(value.email)"
+              @click="drawer = true; showMessage(value.phone)"
             ></i>
             <i v-show="loading" class="el-icon-loading"></i>
           </td>
-          <td>{{ value.store_id }}</td>
-          <td>{{ value.id_card }}</td>
+          <td>{{ value.storeId }}</td>
+          <td>{{ value.idCard }}</td>
           <td>{{ value.phone }}</td>
           <td>
             <button @click="change(index)">修改</button>
@@ -79,8 +79,8 @@
           <p>姓名：</p><span>{{ changeManage.username }}</span><br><br>
           <label for="name">职位: </label>
           <input type="text" name="" id="name" v-model="changeManage.posts"/><br /><br />
-          <label for="area">账户: </label>
-          <input type="text" name="" id="area" v-model="changeManage.email"/><br /><br />
+          <label for="area">电话: </label>
+          <input type="text" name="" id="area" v-model="changeManage.phone"/><br /><br />
           <p>所属门店: </p>
           <select name="store" id="store_id" v-model="changeManage.storeId">
             <option
@@ -177,7 +177,7 @@
       :with-header="false">
       <div class="outer">
         <div class="top">
-          <p>{{ user.name }}</p>
+          <p>{{ user.username }}</p>
         </div>
         <div class="left">
           <span>姓名: </span><span>{{ user.username }}</span><br>
@@ -186,9 +186,9 @@
           <span>住址: </span><span>{{ user.address ? user.address : '-' }}</span>
         </div>
         <div class="right">
-          <span>性别: </span><span>{{ user.gender ? user.gender : '-' }}</span><br>
-          <span>工号: </span><span>{{ user.id }}</span><br>
-          <span>所属门店: </span><span>{{ user.store }}</span><br>
+          <span>性别: </span><span>{{ user.gender === 0 ? '男' : '女' }}</span><br>
+          <span>工号: </span><span>{{ user.idCard }}</span><br>
+          <span>所属门店: </span><span>{{ user.myStoreName }}</span><br>
         </div>
       </div>
     </el-drawer>
@@ -261,6 +261,7 @@ export default {
   },
   watch:{
     input(){
+      this.val = 1
       this.getManage()
     },
     selected(){
@@ -276,8 +277,8 @@ export default {
       }).then((resp) => {
         console.log(resp.data.data.list)
         this.manages = resp.data.data.list
-        this.total = parseInt(resp.data.data.total)
-        this.all = resp.data.data.all
+        this.total = resp.data.data.totalPage
+        this.all = resp.data.data.totalCount
       });
     },
     getStore(){
@@ -306,8 +307,18 @@ export default {
         //   'user': this.changeManage
         // }
         data: this.changeManage
+      }).then(resp => {
+        console.log(resp.data.msg)
+        if( resp.data.msg == '修改成功'){
+          this.open3()
+        }else{
+          this.note = resp.data.msg
+          this.open2()
+        }
+        this.getManage()
+
       })
-      this.getManage()
+
     },
     // 删除按钮
     del(id) {
@@ -406,6 +417,14 @@ export default {
           duration: '1000'
         });
       },
+    open3() {
+      this.$notify({
+        title: '成功',
+        message: '修改成功！',
+        type: 'success',
+        duration: '1000'
+      });
+    },
     // 点击确定添加员工按钮
     confirm() {
       if(this.manage.name.length == 0 || this.manage.posts.length == 0 || this.manage.phone.length == 0 ||
@@ -420,7 +439,7 @@ export default {
             'user': this.manage
           }
         }).then(result => {
-          if(result.data.data){
+          if(result.data.msg){
             alert(result.data.msg)
             this.show = false;
             this.manage = {
@@ -444,12 +463,17 @@ export default {
         this.loading = true
         this.$http({
           method: "GET",
-          url: "http://192.168.136.205:8080/users/" + e,
+          url: "http://localhost:9999/employee/myEmployee/" + e,
         }).then(resp =>{
+          // this.loading = false
           if(resp.data){
             this.loading = false
+
             this.user = resp.data.data
+            this.user.myStoreName=resp.data.myStoreName
+            this.user.posts=resp.data.posts
           }
+
         })
       }
     },
