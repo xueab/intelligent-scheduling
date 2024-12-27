@@ -138,11 +138,11 @@ export default {
           localStorage.type = this.account.type;
           // 根据 type 值重定向
           if (this.account.type == 1) {
-            this.$router.replace("/employeeSchedule");
+            this.$router.replace("/index/employeeSchedule");
           } else if (this.account.type == 2) {
-            this.$router.replace("/Storeinfomation");
+            this.$router.replace("/index/Storeinformation");
           } else if (this.account.type == 3) {
-            this.$router.replace("/Schedule");
+            this.$router.replace("/index/Schedule");
           } else {
             // 默认的重定向路径
             this.$router.replace("/index");

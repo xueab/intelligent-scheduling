@@ -32,43 +32,43 @@
           </tr>
 
           <tr v-if="radio1 == '周一'">
-            <td v-for="(a, b) in day1" :key="b">
+            <td v-for="(a, b) in day" :key="b">
               <p v-if="a && a.time" :style="{ backgroundColor: colors[b] }">{{a.time}}</p>
             </td>
           </tr>
 
           <tr v-if="radio1 == '周二'">
-            <td v-for="(a, b) in day2" :key="b">
+            <td v-for="(a, b) in day" :key="b">
               <p v-if="a && a.time" :style="{ backgroundColor: colors[b] }">{{a.time}}</p>
             </td>
           </tr>
 
           <tr v-if="radio1 == '周三'">
-            <td v-for="(a, b) in day3" :key="b">
+            <td v-for="(a, b) in day" :key="b">
               <p v-if="a && a.time" :style="{ backgroundColor: colors[b] }">{{a.time}}</p>
             </td>
           </tr>
 
           <tr v-if="radio1 == '周四'">
-            <td v-for="(a, b) in day4" :key="b">
+            <td v-for="(a, b) in day" :key="b">
               <p v-if="a && a.time" :style="{ backgroundColor: colors[b] }">{{a.time}}</p>
             </td>
           </tr>
 
           <tr v-if="radio1 == '周五'">
-            <td v-for="(a, b) in day5" :key="b">
+            <td v-for="(a, b) in day" :key="b">
               <p v-if="a && a.time" :style="{ backgroundColor: colors[b] }">{{a.time}}</p>
             </td>
           </tr>
 
           <tr v-if="radio1 == '周六'">
-            <td v-for="(a, b) in day6" :key="b">
+            <td v-for="(a, b) in day" :key="b">
               <p v-if="a && a.time" :style="{ backgroundColor: colors[b] }">{{a.time}}</p>
             </td>
           </tr>
 
           <tr v-if="radio1 == '周日'">
-            <td v-for="(a, b) in day7" :key="b">
+            <td v-for="(a, b) in day" :key="b">
               <p v-if="a && a.time" :style="{ backgroundColor: colors[b] }">{{a.time}}</p>
             </td>
           </tr>
@@ -87,7 +87,14 @@ export default {
     return {
       // arr:[],
       radio1: '周一',
-      day:[],
+      day:[
+        {time: '9:00-10:00'},    // 9:00-11:00
+        {time: '11:00-11:30'},                     // 11:00-13:00
+        {},
+        {},
+        {},
+        {}
+      ],
       day1: [
         {time: '9:00-10:00'},    // 9:00-11:00
         {time: '11:00-11:30'},                     // 11:00-13:00
@@ -188,10 +195,19 @@ export default {
     get(){
       this.$http({
         method: 'GET',
-        url: 'http://localhost:9999/employeeSchedule/' + localStorage.id + this.date1,
+        url: "http://localhost:9999/employee/Schedule?id=" + localStorage.id +'&storeId=1'+'&date='+ this.date1,
       }).then( result => {
         // this.arr = result.data.data
-        this.day = result.data.data
+        let scheduleData = result.data.data;
+        // 将后端数据格式化成 day 数组
+        this.day = this.day.map((item, index) => {
+          if (scheduleData[index] && scheduleData[index].length > 0) {
+            // 如果有数据，获取第一个班次的时间
+            return { time: scheduleData[index][0].time };
+          }
+          return {}; // 如果没有数据，则保留空对象
+        });
+        console.log(this.day)
         this.loading = false
       })
     },

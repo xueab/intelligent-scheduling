@@ -128,14 +128,22 @@ export default {
       this.$http({
         method: "GET",
         url:
-            "http://localhost:9999/employee/Schedule?id=" + localStorage.id +'&date='+ this.date1,
+            "http://localhost:9999/employee/Schedule?id=" + localStorage.id +'&storeId=1'+'&date='+ this.date1,
       }).then((result) => {
 
-        this.day = result.data.data;
         console.log('11111111111111')
         console.log(result.data.data);
         console.log('222222222222222')
         console.log(this.day);
+        let scheduleData = result.data.data;
+        // 将后端数据格式化成 day 数组
+        this.day = this.day.map((item, index) => {
+          if (scheduleData[index] && scheduleData[index].length > 0) {
+            // 如果有数据，获取第一个班次的时间
+            return { time: scheduleData[index][0].time };
+          }
+          return {}; // 如果没有数据，则保留空对象
+        });
       });
     },
     getWeather() {

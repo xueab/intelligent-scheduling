@@ -72,7 +72,7 @@
           <tr>
             <th>{{ date1 | thisDay }}</th>
                 <td v-for="(a, b) in day" :key="b">
-                  <p v-for="(c, d) in a" :key="d" :style="{ backgroundColor: colors[d] }">{{ c.name }}</p>
+                  <p v-for="(c, d) in a" :key="d" :style="{ backgroundColor: colors[d % colors.length] }">{{ c.name }}</p>
                 </td>
           </tr>
 
@@ -109,8 +109,12 @@ export default {
       // ],
       day: [
         [{ name: 'h1' }, {name: 'h2'}],
-        [{name: 'h1'}]
-
+        [{name: 'h1'}],
+          [],
+          [],
+          [],
+          [],
+          []
         // 其他班次...
       ],
       processedDay: [],
@@ -183,9 +187,24 @@ export default {
       this.$http({
         method: "GET",
         url:
-            "http://localhost:9999/schedule?" + localStorage.storeId + '&' + this.date1
+            "http://localhost:9999/schedule?storeId=1" + '&date=' + this.date1
       }).then((result) => {
-        this.arr = result.data.data;
+        let scheduleData = result.data.data;
+        console.log(result.data.data);
+        console.log(scheduleData);
+        this.day = scheduleData.map((item) => {
+          // 对每个时间段的班次进行处理
+          if (item && item.length > 0) {
+            // 如果该时间段有班次数据，则返回这些班次
+            return item.map((subItem) => {
+              return { name: subItem.name || '未安排' }; // 如果subItem.name为空，则设置为'未安排'
+            });
+          } else {
+            // 如果该时间段没有班次数据，返回空数组
+            return [];
+          }
+        });
+        console.log(this.day); // 查看格式是否正确
       });
     },
     getWeather() {
