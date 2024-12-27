@@ -135,11 +135,22 @@ export default {
     };
   },
   methods: {
+    // 计算下周一的日期
+    getNextMonday() {
+      const today = new Date();
+      const dayOfWeek = today.getDay();
+      const daysUntilNextMonday = (dayOfWeek === 0) ? 1 : (8 - dayOfWeek); // 如果今天是周日 (dayOfWeek === 0)，则下周一是一天后，否则计算到下周一的天数
+      today.setDate(today.getDate() + daysUntilNextMonday);
+      const nextMonday = today.toISOString().slice(0, 10); // 格式化为 'YYYY-MM-DD'
+      return nextMonday;
+    },
     // 一键生成排班方案
     generateSchedule() {
+      const nextMonday = this.getNextMonday(); // 获取下周一的日期
+      console.log('date: ' + nextMonday)
       this.$http({
         method: 'GET',
-        url: 'http://localhost:9999/generateWeeklySchedule',  // 假设的接口地址
+        url: 'http://localhost:9999/generateWeeklySchedule?storeId=' + localStorage.storeId + '&date=' + nextMonday,  // 假设的接口地址
       }).then((response) => {
         if (response.data.code === 200) {
           this.weekSchedule = response.data.data;  // 存储返回的排班数据
