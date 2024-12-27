@@ -35,8 +35,8 @@
             ></i>
             <i v-show="loading" class="el-icon-loading"></i>
           </td>
-          <td>{{ value.posts }}</td>
-          <td>{{ value.id }}</td>
+          <td>{{ value.positionName }}</td>
+          <td>{{ value.idCard }}</td>
           <td>{{ value.phone }}</td>
           <td>
             <button @click="change(index)">修改</button>
@@ -160,7 +160,7 @@
           <span>住址: </span><span>{{ user.address ? user.address : '-' }}</span>
         </div>
         <div class="right">
-          <span>性别: </span><span>{{ user.gender ? user.gender : '-' }}</span><br>
+          <span>性别: </span><span>{{ user.gender === 0 ? '男' : '女' }}</span><br>
           <span>工号: </span><span>{{ user.idCard }}</span><br>
           <span>所属门店: </span><span>{{ user.myStoreName }}</span><br>
         </div>
@@ -246,6 +246,7 @@ export default {
       }).then((resp) => {
         //console.log(resp.data.data)
         this.manages = resp.data.data.list
+
         console.log("this.manages.length"+this.manages.length)
         this.total = resp.data.data.totalPage
         this.all = resp.data.data.totalCount
@@ -280,8 +281,18 @@ export default {
         //   'user': this.changeManage
 
         data: this.changeManage
+      }).then(resp => {
+        console.log(resp.data.msg)
+        if( resp.data.msg == '修改成功'){
+          this.open3()
+        }else{
+          this.note = resp.data.msg
+          this.open2()
+        }
+        this.getManage()
+
       })
-      this.getManage()
+      // this.getManage()
     },
     // 删除按钮
     del(id) {
@@ -377,6 +388,14 @@ export default {
         duration: '1000'
       });
     },
+    open3() {
+      this.$notify({
+        title: '成功',
+        message: '修改成功！',
+        type: 'success',
+        duration: '1000'
+      });
+    },
     // 点击确定添加员工按钮
     confirm() {
       if(this.manage.username.length == 0 || this.manage.positionId.length == 0 || this.manage.phone.length == 0 ||
@@ -391,14 +410,12 @@ export default {
         this.$http({
           method: 'POST',
           url: 'http://localhost:9999/employee/add',
-          // data: {
-          //   'user': this.manage
-          // }
 
           data: this.manage
 
         }).then(result => {
-          if(result.data.data){
+
+          if(result.data.msg){
             alert(result.data.msg)
             this.show = false;
             this.manage = {
@@ -424,11 +441,13 @@ export default {
           method: "GET",
           url: "http://localhost:9999/employee/myEmployee/" + e,
         }).then(resp =>{
-
+         // this.loading = false
           if(resp.data){
             this.loading = false
+
             this.user = resp.data.data
             this.user.myStoreName=resp.data.myStoreName
+            this.user.posts=resp.data.posts
           }
 
         })

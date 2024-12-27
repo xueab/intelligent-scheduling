@@ -183,6 +183,7 @@ export default {
         url: 'http://localhost:9999/Store/stores'
       }).then( result => {
         this.store = result.data.data
+        this.all=result.data.count
         //this.store.number=result.data.data.employeeCount
       })
     },
@@ -193,11 +194,17 @@ export default {
     },
     // 修改按钮
     change(e) {
+
       this.dialogFormVisible = true
       this.changeStore = this.store[e]
+      // 设置 myStore 的默认值为当前选中门店的值
+      this.myStore.name = this.changeStore.name;
+      this.myStore.size = this.changeStore.size;
+      this.myStore.address = this.changeStore.address;
     },
     // 修改排班接口
     sendChange(){
+
       this.dialogFormVisible = false
       this.changeStore.name=this.myStore.name
       this.changeStore.size=this.myStore.size
@@ -209,9 +216,19 @@ export default {
         //   'user': this.changeManage
         // }
         data: this.changeStore
+      }).then(resp => {
+        console.log(resp.data.msg)
+        if( resp.data.msg == '修改成功'){
+          this.open3()
+        }else{
+          this.note = resp.data.msg
+          this.open2()
+        }
+        this.getStore()
+
       })
       // this.getManage()
-      this.getStore()
+     // this.getStore()
     },
     // 删除门店信息
     del(id) {
@@ -219,7 +236,7 @@ export default {
         method: 'DELETE',
         url: "http://localhost:9999/Store/deleteStore/" + id,
       }).then(resp => {
-       // this.getManage()
+        this.getStore()
         console.log(resp.data.msg)
         if( resp.data.msg == '删除成功'){
           this.open1()
@@ -326,7 +343,7 @@ export default {
           data: this.addStore,
         }).then(result => {
           console.log(result.data.msg)
-          if(result.data.data){
+          if(result.data.msg){
             alert(result.data.msg)
             this.show = false;
             this.manage = {
