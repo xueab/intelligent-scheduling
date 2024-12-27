@@ -84,7 +84,8 @@ export default {
         {},
         {},
 
-        // 其他班次...
+        // [[], [DayShiftEmployeeVo(time=13:00-13:00)], [DayShiftEmployeeVo(time=13:00-15:00)], [DayShiftEmployeeVo(time=15:00-17:00)], [DayShiftEmployeeVo(time=17:00-17:00)], []]
+
       ],
       processedDay: [],
       date1: '',
@@ -130,7 +131,16 @@ export default {
         url:
             "http://localhost:9999/employeeSchedule/" + localStorage.id + this.date1,
       }).then((result) => {
-        this.arr = result.data.data;
+        // this.arr = result.data.data;
+        let scheduleData = result.data.data;
+        // 将后端数据格式化成 day 数组
+        this.day = this.day.map((item, index) => {
+          if (scheduleData[index] && scheduleData[index].length > 0) {
+            // 如果有数据，获取第一个班次的时间
+            return { time: scheduleData[index][0].time };
+          }
+          return {}; // 如果没有数据，则保留空对象
+        });
       });
     },
     getWeather() {
