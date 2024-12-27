@@ -148,6 +148,7 @@ export default {
         url: 'http://localhost:9999/Store/store/' + 1
       }).then( result => {
         this.myStore = result.data.data
+        this.myStore.number=result.data.employeeCount
       //  this.getStore(result.data.data.id)
       })
     },

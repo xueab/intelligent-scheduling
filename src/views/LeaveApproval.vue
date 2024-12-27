@@ -88,6 +88,8 @@ export default {
                 method: 'POST',
                 url: 'http://localhost:9999/Holiday/Update/'+e+'&'+j,
 
+            }).then(result => {
+                console.log(result)
             })
 
         },
