@@ -20,7 +20,7 @@
         <tr>
           <th>姓名</th>
           <th>职位</th>
-          <th>工号</th>
+<!--          <th>工号</th>-->
           <th>电话</th>
           <th>操作</th>
         </tr>
@@ -36,7 +36,7 @@
             <i v-show="loading" class="el-icon-loading"></i>
           </td>
           <td>{{ value.positionName }}</td>
-          <td>{{ value.idCard }}</td>
+<!--          <td>{{ value.idCard }}</td>-->
           <td>{{ value.phone }}</td>
           <td>
             <button @click="change(index)">修改</button>
@@ -161,7 +161,7 @@
         </div>
         <div class="right">
           <span>性别: </span><span>{{ user.gender === 0 ? '男' : '女' }}</span><br>
-          <span>工号: </span><span>{{ user.idCard }}</span><br>
+<!--          <span>工号: </span><span>{{ user.idCard }}</span><br>-->
           <span>所属门店: </span><span>{{ user.myStoreName }}</span><br>
         </div>
       </div>

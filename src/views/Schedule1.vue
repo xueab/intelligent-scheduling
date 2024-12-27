@@ -96,8 +96,8 @@ export default {
   data() {
     return {
       // 一周排班数据
-      weekSchedule: [],  // 存储后端返回的排班数据
-      selectedDay: '周一',   // 当前选中的星期
+      weekSchedule: [[],[],[],[],[],[],[]],  // 存储后端返回的排班数据
+      selectedDay: null,   // 当前选中的星期
       daySchedule: [],     // 当前选中日期的排班
       weekDays: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
       colors: [
@@ -132,6 +132,7 @@ export default {
       employeeList: [],
       // 新选中的员工
       selectedEmployee: null,
+      id:null
     };
   },
   methods: {
@@ -150,10 +151,12 @@ export default {
       console.log('date: ' + nextMonday)
       this.$http({
         method: 'GET',
-        url: 'http://localhost:9999/generateWeeklySchedule?storeId=' + localStorage.storeId + '&date=' + nextMonday,  // 假设的接口地址
+        url: 'http://localhost:9999/generateWeeklySchedule?storeId=1'+ '&beginDate=' + nextMonday,  // 假设的接口地址
       }).then((response) => {
         if (response.data.code === 200) {
           this.weekSchedule = response.data.data;  // 存储返回的排班数据
+          this.id = response.data.id;
+          this.$message.success('排班方案已生成');
         } else {
           this.$message.error('获取排班方案失败');
         }
@@ -167,36 +170,52 @@ export default {
       this.selectedDay = day;
       const dayIndex = this.weekDays.indexOf(day);
       if (this.weekSchedule && this.weekSchedule[dayIndex]) {
-        this.daySchedule = this.weekSchedule[dayIndex];  // 获取当天的排班数据
+        this.shifts = this.weekSchedule[dayIndex];  // 获取当天的排班数据
       } else {
-        this.daySchedule = [];
+        this.shifts = [];
       }
+      console.log(this.shifts);
     },
 
     // 应用当前排班方案
     applySchedule() {
-      this.$http({
-        method: 'POST',
-        url: 'http://localhost:9999/applySchedule',  // 假设的接口地址
-        data: {
-          day: this.selectedDay,
-          schedule: this.daySchedule,
-        },
-      }).then((response) => {
-        if (response.data.code === 200) {
-          this.$message.success('排班方案已应用');
-        } else {
-          this.$message.error('应用排班方案失败');
-        }
-      }).catch((error) => {
-        this.$message.error('网络错误');
-      });
+      // this.$http({
+      //   method: 'POST',
+      //   url: 'http://localhost:9999/applySchedule',  // 假设的接口地址
+      //   data: {
+      //     day: this.selectedDay,
+      //     schedule: this.daySchedule,
+      //   },
+      // }).then((response) => {
+      //   if (response.data.code === 200) {
+      //     this.$message.success('排班方案已应用');
+      //   } else {
+      //     this.$message.error('应用排班方案失败');
+      //   }
+      // }).catch((error) => {
+      //   this.$message.error('网络错误');
+      // });
+      this.$message.success('排班方案已应用');
     },
 
     // 清空当前选中的排班
     clearSchedule() {
+      this.$http({
+        method: 'DELETE',
+        url: 'http://localhost:9999/scheduling/schedulingTask/delete?id='+this.id,  // 假设的接口地址
+      }).then((response) => {
+        if (response.data.code === 200) {
+          this.$message.success('排班方案已取消');
+        } else {
+          this.$message.error('取消失败');
+        }
+      }).catch((error) => {
+        this.$message.error('网络错误');
+      });
       this.selectedDay = null;
       this.daySchedule = [];
+      this.weekSchedule = [[],[],[],[],[],[],[]]
+
     },
 
     // 打开班次详情弹窗

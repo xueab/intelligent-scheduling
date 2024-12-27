@@ -90,6 +90,7 @@ export default {
 
             }).then(result => {
                 console.log(result)
+              this.getData()
             })
 
         },
