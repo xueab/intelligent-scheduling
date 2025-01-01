@@ -152,6 +152,13 @@
           </el-menu-item>
           </div>
 
+          <div v-if="isStoreAdmin">
+            <el-menu-item index="/index/ChangeScheduleRule">
+              <i class="el-icon-message-solid"></i>
+              <span slot="title">修改排班规则</span>
+            </el-menu-item>
+          </div>
+
         </el-menu>
       </div>
       <div id="right">
