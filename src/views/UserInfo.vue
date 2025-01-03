@@ -103,25 +103,8 @@
       <p>修改个人信息</p>
       <div class="wrapper">
         <div style="display: flex; justify-content: center;">
-<!--          <div>-->
-<!--&lt;!&ndash;            <label for="name">姓名：</label><input type="text" id="name" ref="name" :value="user.username"><br><br>&ndash;&gt;-->
-<!--&lt;!&ndash;            <label for="gender">性别：</label><input type="text" id="gender" ref="gender" :value="user.gender"><br><br>&ndash;&gt;-->
-<!--&lt;!&ndash;            <label for="age">年龄：</label><input type="text" id="age" ref="age" :value="user.age"><br><br>&ndash;&gt;-->
-<!--&lt;!&ndash;            <label for="address">联系地址：</label><input type="text" id="address" ref="address" :value="user.address"><br><br>&ndash;&gt;-->
-<!--&lt;!&ndash;            <label for="phone">电话：</label><input type="text" id="phone" ref="phone" :value="user.phone"><br><br>&ndash;&gt;-->
-
-<!--&lt;!&ndash;            <label for="name">姓名：{{user.username}}</label>&ndash;&gt;-->
-<!--&lt;!&ndash;            <label for="gender">性别：{{user.gender}}</label>&ndash;&gt;-->
-<!--&lt;!&ndash;            <label for="age">年龄：{{user.age}}</label>&ndash;&gt;-->
-<!--&lt;!&ndash;            <label for="address">联系地址：</label><input type="text" id="address" ref="address" :value="user.address"><br><br>&ndash;&gt;-->
-<!--&lt;!&ndash;            <label for="phone">电话：</label><input type="text" id="phone" ref="phone" :value="user.phone"><br><br>&ndash;&gt;-->
-<!--          </div>-->
           <div>
             <div>
-<!--              <label for="address">联系地址：</label><input style="overflow-x: auto" type="text" id="address" ref="address" :value="user.address"><br><br>-->
-<!--              <label for="address">联系地址：</label>-->
-<!--              <el-input type="text" id="address" ref="address" v-model="user.address"/><br><br>-->
-<!--              <label for="phone">电话：</label><input type="text" id="phone" ref="phone" :value="user.phone"><br><br>-->
 
               <el-form :model="user" label-width="120px">
                 <el-form-item label="联系地址：" prop="address">
@@ -133,7 +116,7 @@
                 </el-form-item>
 
                 <el-form-item label="工作日偏好">
-                  <el-select v-model="user.day" placeholder="请选择">
+                  <el-select v-model="user.day" multiple placeholder="请选择">
                     <el-option label="周一" :value="1"></el-option>
                     <el-option label="周二" :value="2"></el-option>
                     <el-option label="周三" :value="3"></el-option>
@@ -145,20 +128,24 @@
                 </el-form-item>
 
                 <el-form-item label="工作时间偏好">
-                  <el-select v-model="user.date" placeholder="请选择">
-                    <el-option label="8点- 12点" value="8点-12点"></el-option>
-                    <el-option label="12点 - 16点" value="12点-16点"></el-option>
-                    <el-option label="16点 - 20点" value="16点-20点"></el-option>
-                    <el-option label="20点 - 24点" value="20点-24点"></el-option>
+                  <el-select v-model="user.date" multiple placeholder="请选择">
+                    <el-option label="8:00- 12:00" value="8:00-12:00"></el-option>
+                    <el-option label="12:00 - 16:00" value="12:00-16:00"></el-option>
+                    <el-option label="16:00 - 20:00" value="16:00-20:00"></el-option>
+                    <el-option label="20:00 - 24:00" value="20:00-24:00"></el-option>
                   </el-select>
 
                 </el-form-item>
 
                 <el-form-item label="班次时长偏好">
-                  <el-select v-model="user.time" placeholder="请选择">
+                  <el-select v-model="user.time" multiple placeholder="请选择">
                   <el-option label="两小时" :value="2"></el-option>
                   <el-option label="三小时" :value="3"></el-option>
                   <el-option label="四小时" :value="4"></el-option>
+                  <el-option label="五小时" :value="5"></el-option>
+                  <el-option label="六小时" :value="6"></el-option>
+                  <el-option label="七小时" :value="7"></el-option>
+                  <el-option label="八小时" :value="8"></el-option>
                   </el-select>
                 </el-form-item>
               </el-form>
@@ -236,6 +223,9 @@ export default {
     }).then(resp => {
       console.log(resp.data.data); // 查看返回的数据
       this.user = resp.data.data
+      // this.user.day = this.user.day.split('|').map(Number)
+      // this.user.date = this.user.date.split('|').map(Number)
+      // this.user.time = this.user.time.split('|').map(Number)
       document.body.style.overflow='hidden';
 
 
@@ -255,6 +245,12 @@ export default {
       // this.user.day = this.$ref.day.value
       // this.user.date = this.$ref.date.value
       // this.user.time = this.$ref.time.value
+      console.log("user day: " + this.user.day)
+      console.log("user date: " + this.user.date)
+      console.log("user time: " + this.user.time)
+      this.user.day = this.user.day.join('|')
+      this.user.date = this.user.date.join('|')
+      this.user.time = this.user.time.join('|')
       this.$http({
         method: 'PUT',
         url: 'http://localhost:9999/users/info/' + localStorage.email,
@@ -264,7 +260,9 @@ export default {
         data: this.user
 
       }).then(result => {
-        alert(result.data.msg)
+        if (result.data.code === 200) {
+          this.$message.success('修改成功');
+        }
       })
       this.show = false
       document.body.style.overflow='';
